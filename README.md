@@ -64,3 +64,17 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+---
+
+## BIOMED Demo quick start
+
+This project contains a small demo used for exercises. To view the UI without building frontend assets, run:
+
+```bash
+php artisan serve
+```
+
+Open `http://127.0.0.1:8000/home`. Use **Login** (demo) to set a name and role (User/Admin/Super Admin). The dashboard will show different cards depending on role. (This demo uses session-based login — no database required.)
+
+Images in the demo are placeholder avatars pulled from `https://i.pravatar.cc` so you see realistic profile photos without adding local files.
