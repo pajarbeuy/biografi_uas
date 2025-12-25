@@ -31,46 +31,33 @@ class UserController extends Controller
     }
     
     public function updateRole(Request $request, User $user)
-    {
-        try {
-            abort_if($user->role === 'superadmin', 403, "Superadmin tidak bisa diubah");
-            
-            $request->validate([
-                'role' => 'required|in:user,admin'
-            ]);
-            
-            $user->update([
-                'role' => $request->role
-            ]);
-            
-            return response()->json([
-                'message' => 'Role berhasil diupdate',
-                'user' => $user
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => 'Gagal mengupdate role',
-                'message' => $e->getMessage()
-            ], 500);
-        }
-    }
+{
+    $this->authorize('updateRole', $user);
+
+    $request->validate([
+        'role' => 'required|in:user,admin'
+    ]);
+
+    $user->update([
+        'role' => $request->role
+    ]);
+
+    return response()->json([
+        'message' => 'Role berhasil diupdate',
+        'user' => $user
+    ]);
+}
+
     
     public function destroy(User $user)
-    {
-        try {
-            abort_if($user->role === 'superadmin', 403, "Superadmin tidak bisa dihapus");
-            abort_if($user->id === auth()->id(), 403, "Tidak bisa menghapus akun sendiri");
-            
-            $user->delete();
-            
-            return response()->json([
-                'message' => 'User berhasil dihapus'
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => 'Gagal menghapus user',
-                'message' => $e->getMessage()
-            ], 500);
-        }
-    }
+{
+    $this->authorize('delete', $user);
+
+    $user->delete();
+
+    return response()->json([
+        'message' => 'User berhasil dihapus'
+    ]);
+}
+
 }
