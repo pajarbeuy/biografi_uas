@@ -30,16 +30,24 @@
                 @foreach($biografis as $biografi)
                     <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
                         <!-- Foto Tokoh -->
-                        <div class="aspect-square bg-gray-200 flex items-center justify-center overflow-hidden">
-                            @if($biografi->image_path)
-                                <img src="{{ asset('storage/' . $biografi->image_path) }}" 
-                                     alt="{{ $biografi->name }}"
-                                     class="w-full h-full object-cover">
-                            @else
-                                <svg class="w-24 h-24 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                                </svg>
-                            @endif
+                        <div class="aspect-square bg-gray-200 flex items-center justify-center overflow-hidden relative group">
+                            <a href="{{ route('profile-tokoh.show', $biografi->slug) }}" class="block w-full h-full relative">
+                                @if($biografi->image_path)
+                                    <img src="{{ asset('storage/' . $biografi->image_path) }}" 
+                                         alt="{{ $biografi->name }}"
+                                         class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+                                @else
+                                    <div class="w-full h-full flex items-center justify-center bg-gray-200">
+                                        <svg class="w-24 h-24 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                        </svg>
+                                    </div>
+                                @endif
+                                <!-- Overlay hint removed to avoid black box issue -->
+                                <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <span class="bg-black bg-opacity-50 text-white px-3 py-1 rounded-full text-sm">Lihat Detail</span>
+                                </div>
+                            </a>
                         </div>
                         
                         <!-- Info Tokoh -->
