@@ -3,8 +3,10 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
     use Notifiable;
 
@@ -47,5 +49,19 @@ class User extends Authenticatable
             return in_array($this->role, $role);
         }
         return $this->role === $role;
+    }
+
+    /**
+     * Determine if user can access Filament panel
+     */
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return in_array($this->role, ['admin', 'superadmin']);
+    }
+
+    // Relationships
+    public function biografis()
+    {
+        return $this->hasMany(Biografi::class);
     }
 }

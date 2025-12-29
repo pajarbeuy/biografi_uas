@@ -28,7 +28,8 @@
             @endisset
 
             <!-- Page Content -->
-            <main>
+            <main class="pt-12 pb-16 px-4 sm:px-6 lg:px-8">
+
                 {{ $slot }}
             </main>
         </div>

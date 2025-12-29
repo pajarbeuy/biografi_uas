@@ -1,45 +1,54 @@
 <?php
+
+use App\Http\Controllers\Auth\UserAuthController;
+use App\Http\Controllers\Auth\UserRegisterController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\UserController;
 
-require __DIR__.'/auth.php';
-
+// Redirect root to home
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/home');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Public pages (accessible to everyone)
+Route::get('/home', function () {
+    return view('home');
+})->name('home');
 
-Route::middleware('auth')->group(function () {
+Route::get('/profile-tokoh', [App\Http\Controllers\BiografiController::class, 'index'])->name('profile-tokoh');
+
+Route::get('/reference', function () {
+    return view('reference');
+})->name('reference');
+
+Route::get('/about-us', function () {
+    return view('about-us');
+})->name('about-us');
+
+Route::get('/tambah-tokoh', [App\Http\Controllers\BiografiController::class, 'create'])
+    ->middleware('auth')
+    ->name('tambah-tokoh');
+
+Route::post('/tambah-tokoh', [App\Http\Controllers\BiografiController::class, 'store'])
+    ->middleware('auth')
+    ->name('tambah-tokoh.store');
+
+// User authentication routes (custom, bukan Breeze)
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [UserAuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [UserAuthController::class, 'login']);
+    
+    Route::get('/register', [UserRegisterController::class, 'showRegistrationForm'])->name('register');
+    Route::post('/register', [UserRegisterController::class, 'register']);
+});
+
+// User authenticated routes
+Route::middleware(['auth'])->group(function () {
+    // Logout
+    Route::post('/logout', [UserAuthController::class, 'logout'])->name('logout');
+    
+    // Profile routes (available for all authenticated users)
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
-// Routes Admin - VIEW (untuk halaman)
-Route::prefix('admin')
-    ->middleware(['auth', 'role:admin,superadmin'])
-    ->name('admin.')
-    ->group(function () {
-        Route::get('/users', [UserController::class, 'indexView'])->name('users.index');
-    });
-
-// Routes Admin - API (untuk AJAX request)
-Route::prefix('api/admin')
-    ->middleware(['auth', 'role:admin,superadmin'])
-    ->name('api.admin.')
-    ->group(function () {
-        Route::get('/users', [UserController::class, 'index'])->name('users.list');
-    });
-
-// Routes Superadmin - API
-Route::prefix('api/admin')
-    ->middleware(['auth', 'role:superadmin'])
-    ->name('api.admin.')
-    ->group(function () {
-        Route::patch('/users/{user}/role', [UserController::class, 'updateRole'])->name('users.update-role');
-        Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
-    });
