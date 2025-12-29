@@ -45,9 +45,9 @@ class MathematicsBranchesSeeder extends Seeder
         ];
 
         foreach ($branches as $branch) {
-            Category::updateOrCreate(
+            Category::firstOrCreate(
                 ['name' => $branch['name']],
-                ['description' => $branch['description']]
+                $branch
             );
         }
     }
