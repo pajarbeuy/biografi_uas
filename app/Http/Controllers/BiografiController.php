@@ -73,16 +73,4 @@ class BiografiController extends Controller
         return redirect()->route('profile-tokoh')
             ->with('success', 'Biografi berhasil ditambahkan! Admin akan mereview sebelum dipublikasikan.');
     }
-    /**
-     * Display the specified biography.
-     */
-    public function show(Biografi $tokoh)
-    {
-        // Ensure only published biographies are visible unless user is admin/owner (logic can be added later)
-        if ($tokoh->status !== 'published') {
-            abort(404);
-        }
-        
-        return view('profile.detail', compact('tokoh'));
-    }
 }

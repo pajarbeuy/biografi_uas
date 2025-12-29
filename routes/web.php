@@ -16,7 +16,6 @@ Route::get('/home', function () {
 })->name('home');
 
 Route::get('/profile-tokoh', [App\Http\Controllers\BiografiController::class, 'index'])->name('profile-tokoh');
-Route::get('/profile-tokoh/{tokoh:slug}', [App\Http\Controllers\BiografiController::class, 'show'])->name('profile-tokoh.show');
 
 Route::get('/reference', function () {
     return view('reference');
