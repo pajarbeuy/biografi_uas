@@ -10,6 +10,7 @@
     @include('layouts.navbar')
     
     <div class="container mx-auto px-4 py-8">
+        
         <h1>Pajar Ganteng</h1>
     </div>
 
