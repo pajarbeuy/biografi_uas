@@ -84,8 +84,8 @@
                                     Kisah Hidup
                                 </h2>
                                 <div class="prose prose-lg text-gray-600 leading-relaxed text-justify">
-                                    {{-- Use nl2br to preserve line breaks if it's plain text --}}
-                                    {!! nl2br(e($tokoh->life_story)) !!}
+                                    {{-- Render HTML content from rich text editor --}}
+                                    {!! $tokoh->life_story !!}
                                 </div>
                             </section>
                         </div>
