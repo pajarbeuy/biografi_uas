@@ -14,10 +14,13 @@ return new class extends Migration
         if (!Schema::hasTable('biografis')) {
             Schema::create('biografis', function (Blueprint $table) {
                 $table->id();
-                $table->string('title');
+                $table->string('name'); // Nama tokoh matematikawan
                 $table->string('slug')->unique();
-                $table->text('description')->nullable();
-                $table->longText('content');
+                $table->string('birth_place')->nullable(); // Tempat lahir
+                $table->date('birth_date')->nullable(); // Tanggal lahir
+                $table->date('death_date')->nullable(); // Tanggal meninggal
+                $table->text('achievements')->nullable(); // Prestasi
+                $table->longText('life_story'); // Kisah hidup
                 $table->foreignId('category_id')->nullable()->constrained('categories')->onDelete('set null');
                 $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
                 $table->enum('status', ['draft', 'published'])->default('draft');
