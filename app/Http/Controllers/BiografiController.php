@@ -15,8 +15,10 @@ class BiografiController extends Controller
      */
     public function index()
     {
-        $biografis = Biografi::where('status', 'published')
-            ->with(['category', 'user'])
+        // Show all biographies (both draft and published)
+        // Draft biographies will have a badge in the view
+        $biografis = Biografi::with(['category', 'user'])
+            ->orderBy('status', 'asc') // Published first, then draft
             ->orderBy('created_at', 'desc')
             ->get();
 
