@@ -6,57 +6,82 @@
     <title>Profile Tokoh - BIOTOMA</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-gray-50">
+<body class="bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 min-h-screen">
     @include('layouts.navbar')
     
-    <div class="container mx-auto px-4 py-8">
+    <div class="container mx-auto px-4 py-12">
         <!-- Success Message -->
         @if(session('success'))
-            <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded shadow-sm">
+            <div class="bg-gradient-to-r from-green-50 to-emerald-50 border-l-4 border-green-500 text-green-800 p-5 mb-8 rounded-xl shadow-md max-w-5xl mx-auto">
                 <div class="flex items-center">
-                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <svg class="w-6 h-6 mr-3 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                     </svg>
-                    <p class="font-medium">{{ session('success') }}</p>
+                    <p class="font-semibold">{{ session('success') }}</p>
                 </div>
             </div>
         @endif
         
-        <h1 class="text-4xl font-bold text-gray-800 mb-2">Profil Tokoh Matematikawan</h1>
-        <p class="text-gray-600 mb-8">Kumpulan biografi matematikawan terkenal di dunia</p>
+        <!-- Page Header -->
+        <div class="text-center mb-12 max-w-4xl mx-auto">
+            <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full mb-4 shadow-lg">
+                <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                </svg>
+            </div>
+            <h1 class="text-5xl font-bold bg-gradient-to-r from-amber-700 via-orange-600 to-amber-700 bg-clip-text text-transparent mb-3">
+                Profil Tokoh Matematikawan
+            </h1>
+            <p class="text-lg text-amber-800/80">Kumpulan biografi matematikawan terkenal yang mengubah dunia</p>
+        </div>
         
         @if($biografis->count() > 0)
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach($biografis as $biografi)
-                    <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 relative">
+                        <!-- Status Badge -->
+                        @if($biografi->status === 'draft')
+                            <div class="absolute top-3 right-3 z-10">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r from-yellow-400 to-orange-400 text-white shadow-lg">
+                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    Menunggu Review
+                                </span>
+                            </div>
+                        @else
+                            <div class="absolute top-3 right-3 z-10">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r from-green-400 to-emerald-500 text-white shadow-lg">
+                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    Published
+                                </span>
+                            </div>
+                        @endif
+                        
                         <!-- Foto Tokoh -->
-                        <div class="aspect-square bg-gray-200 flex items-center justify-center overflow-hidden relative group">
-                            <a href="{{ route('profile-tokoh.show', $biografi->slug) }}" class="block w-full h-full relative">
-                                @if($biografi->image_path)
-                                    <img src="{{ asset('storage/' . $biografi->image_path) }}" 
-                                         alt="{{ $biografi->name }}"
-                                         class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
-                                @else
-                                    <div class="w-full h-full flex items-center justify-center bg-gray-200">
-                                        <svg class="w-24 h-24 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                                        </svg>
-                                    </div>
-                                @endif
-                                <!-- Overlay hint removed to avoid black box issue -->
-                                <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <span class="bg-black bg-opacity-50 text-white px-3 py-1 rounded-full text-sm">Lihat Detail</span>
-                                </div>
-                            </a>
+                        <div class="aspect-square bg-gradient-to-br from-amber-100 to-orange-100 flex items-center justify-center overflow-hidden">
+                            @if($biografi->image_path)
+                                <img src="{{ asset('storage/' . $biografi->image_path) }}" 
+                                     alt="{{ $biografi->name }}"
+                                     class="w-full h-full object-cover {{ $biografi->status === 'draft' ? 'opacity-75' : '' }}">
+                            @else
+                                <svg class="w-24 h-24 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                </svg>
+                            @endif
                         </div>
                         
                         <!-- Info Tokoh -->
                         <div class="p-5">
-                            <h3 class="text-xl font-bold text-gray-800 mb-2">{{ $biografi->name }}</h3>
+                            <h3 class="text-xl font-bold text-gray-800 mb-2 {{ $biografi->status === 'draft' ? 'text-gray-600' : '' }}">
+                                {{ $biografi->name }}
+                            </h3>
                             
                             @if($biografi->category)
                                 <div class="flex items-center text-sm text-gray-600 mb-3">
-                                    <svg class="w-4 h-4 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg class="w-4 h-4 mr-2 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                     </svg>
                                     <span class="font-semibold">{{ $biografi->category->name }}</span>
@@ -65,7 +90,7 @@
                             
                             @if($biografi->birth_place || $biografi->birth_date)
                                 <div class="flex items-center text-sm text-gray-600">
-                                    <svg class="w-4 h-4 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg class="w-4 h-4 mr-2 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                                     </svg>
