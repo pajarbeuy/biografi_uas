@@ -11,6 +11,7 @@ class Biografi extends Model
         'name',
         'slug',
         'birth_place',
+        'education',
         'birth_date',
         'death_date',
         'achievements',
@@ -39,6 +40,16 @@ class Biografi extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public function references()
+    {
+        return $this->hasMany(Reference::class);
+    }
+
+    public function views()
+    {
+        return $this->hasMany(BiographyView::class);
+    }
+
     // Helper methods
     public function isPublished()
     {
@@ -50,6 +61,21 @@ class Biografi extends Model
         return $this->status === 'draft';
     }
 
+    public function isPending()
+    {
+        return $this->status === 'pending';
+    }
+
+    public function isApproved()
+    {
+        return $this->status === 'approved';
+    }
+
+    public function isRejected()
+    {
+        return $this->status === 'rejected';
+    }
+
     public function publish()
     {
         $this->status = 'published';
@@ -59,6 +85,24 @@ class Biografi extends Model
     public function unpublish()
     {
         $this->status = 'draft';
+        $this->save();
+    }
+
+    public function approve()
+    {
+        $this->status = 'approved';
+        $this->save();
+    }
+
+    public function reject()
+    {
+        $this->status = 'rejected';
+        $this->save();
+    }
+
+    public function setPending()
+    {
+        $this->status = 'pending';
         $this->save();
     }
 }
