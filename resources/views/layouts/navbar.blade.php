@@ -14,10 +14,12 @@
                 <a href="/profile-tokoh" class="text-md font-medium text-gray-700 hover:text-blue-600 transition-colors">Profile Tokoh</a>
                 <a href="/reference" class="text-md font-medium text-gray-700 hover:text-blue-600 transition-colors">Reference</a>
                 <a href="/about-us" class="text-md font-medium text-gray-700 hover:text-blue-600 transition-colors">About Us</a>
-                @if(!auth()->user()->isAdmin() && !auth()->user()->isSuperAdmin())
-                <a href="/tambah-tokoh" class="text-md font-medium text-gray-700 hover:text-blue-600 transition-colors">Tambah Tokoh</a>
-            @endif
-        </div>
+                @auth
+                    @if(!auth()->user()->isAdmin() && !auth()->user()->isSuperAdmin())
+                        <a href="/tambah-tokoh" class="text-md font-medium text-gray-700 hover:text-blue-600 transition-colors">Tambah Tokoh</a>
+                    @endif
+                @endauth
+            </div>
 
             <!-- Auth Buttons (Desktop) -->
             <div class="hidden md:flex items-center space-x-4">
