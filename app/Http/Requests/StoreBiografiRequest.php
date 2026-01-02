@@ -25,6 +25,7 @@ class StoreBiografiRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255', 'unique:biografis,name'],
             'birth_place' => ['nullable', 'string', 'max:255'],
+            'education' => ['nullable', 'string'],
             'birth_date' => ['nullable', 'date'],
             'death_date' => ['nullable', 'date', 'after:birth_date'],
             'category_id' => ['nullable', 'exists:categories,id'],

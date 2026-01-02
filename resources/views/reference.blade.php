@@ -11,10 +11,10 @@
 @include('layouts.navbar')
 
 <!-- HEADER -->
-<section class="bg-gradient-to-r from-white-600 to-indigo-700 text-black py-14">
+<section class="bg-gradient-to-r from-white-600 to-indigo-700 text-black py-10 md:py-14">
     <div class="container mx-auto px-4 text-center">
-        <h1 class="text-4xl font-bold mb-3">Referensi Tokoh Matematika</h1>
-        <p class="text-black-100 max-w-3xl mx-auto">
+        <h1 class="text-3xl md:text-4xl font-bold mb-3">Referensi Tokoh Matematika</h1>
+        <p class="text-gray-700 max-w-3xl mx-auto px-4">
             Halaman ini memuat daftar tokoh matematika berdasarkan bidang keilmuan
             yang menjadi referensi utama dalam penyusunan biografi pada sistem BIOTOMA.
         </p>
@@ -26,8 +26,8 @@
 
     <!-- ALGEBRA -->
     <div>
-        <h2 class="text-2xl font-bold mb-6">1. Aljabar</h2>
-        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <h2 class="text-xl md:text-2xl font-bold mb-6">1. Aljabar</h2>
+        <div class="grid gap-4 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             <div class="bg-white rounded-xl shadow p-5">Al-Khwarizmi</div>
             <div class="bg-white rounded-xl shadow p-5">Évariste Galois</div>
             <div class="bg-white rounded-xl shadow p-5">Emmy Noether</div>
@@ -36,8 +36,8 @@
 
     <!-- GEOMETRI -->
     <div>
-        <h2 class="text-2xl font-bold mb-6">2. Geometri</h2>
-        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <h2 class="text-xl md:text-2xl font-bold mb-6">2. Geometri</h2>
+        <div class="grid gap-4 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             <div class="bg-white rounded-xl shadow p-5">
                 Euclid 
             </div>
@@ -52,8 +52,8 @@
 
     <!-- KALKULUS -->
     <div>
-        <h2 class="text-2xl font-bold mb-6">3. Kalkulus</h2>
-        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <h2 class="text-xl md:text-2xl font-bold mb-6">3. Kalkulus</h2>
+        <div class="grid gap-4 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             <div class="bg-white rounded-xl shadow p-5">Isaac Newton</div>
             <div class="bg-white rounded-xl shadow p-5">Gottfried Wilhelm Leibniz</div>
             <div class="bg-white rounded-xl shadow p-5">Leonhard Euler</div>
@@ -62,8 +62,8 @@
 
     <!-- STATISTIKA -->
     <div>
-        <h2 class="text-2xl font-bold mb-6">4. Statistika</h2>
-        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <h2 class="text-xl md:text-2xl font-bold mb-6">4. Statistika</h2>
+        <div class="grid gap-4 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             <div class="bg-white rounded-xl shadow p-5">Karl Pearson</div>
             <div class="bg-white rounded-xl shadow p-5">Ronald A. Fisher</div>
             <div class="bg-white rounded-xl shadow p-5">Florence Nightingale</div>
@@ -72,8 +72,8 @@
 
     <!-- TEORI BILANGAN -->
     <div>
-        <h2 class="text-2xl font-bold mb-6">5. Teori Bilangan</h2>
-        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <h2 class="text-xl md:text-2xl font-bold mb-6">5. Teori Bilangan</h2>
+        <div class="grid gap-4 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             <div class="bg-white rounded-xl shadow p-5">Pierre de Fermat</div>
             <div class="bg-white rounded-xl shadow p-5">Carl Friedrich Gauss</div>
             <div class="bg-white rounded-xl shadow p-5">Srinivasa Ramanujan</div>
@@ -82,8 +82,8 @@
 
     <!-- LOGIKA MATEMATIKA -->
     <div>
-        <h2 class="text-2xl font-bold mb-6">6. Logika Matematika</h2>
-        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <h2 class="text-xl md:text-2xl font-bold mb-6">6. Logika Matematika</h2>
+        <div class="grid gap-4 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             <div class="bg-white rounded-xl shadow p-5">George Boole</div>
             <div class="bg-white rounded-xl shadow p-5">Kurt Gödel</div>
             <div class="bg-white rounded-xl shadow p-5">Gottlob Frege</div>
@@ -92,8 +92,8 @@
 
     <!-- MATEMATIKA TERAPAN -->
     <div>
-        <h2 class="text-2xl font-bold mb-6">7. Matematika Terapan</h2>
-        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <h2 class="text-xl md:text-2xl font-bold mb-6">7. Matematika Terapan</h2>
+        <div class="grid gap-4 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             <div class="bg-white rounded-xl shadow p-5">John von Neumann</div>
             <div class="bg-white rounded-xl shadow p-5">Alan Turing</div>
             <div class="bg-white rounded-xl shadow p-5">Joseph Fourier</div>

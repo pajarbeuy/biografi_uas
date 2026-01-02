@@ -1,55 +1,64 @@
 <?php
 
-use App\Http\Controllers\Auth\UserAuthController;
-use App\Http\Controllers\Auth\UserRegisterController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\BiografiController;
+use App\Http\Controllers\UserDashboardController;
 use Illuminate\Support\Facades\Route;
 
-// Redirect root to home
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+*/
+
+// Public Routes
 Route::get('/', function () {
     return redirect('/home');
 });
 
-// Public pages (accessible to everyone)
 Route::get('/home', function () {
     return view('home');
 })->name('home');
-
-Route::get('/profile-tokoh', [App\Http\Controllers\BiografiController::class, 'index'])->name('profile-tokoh');
-Route::get('/profile-tokoh/{tokoh:slug}', [App\Http\Controllers\BiografiController::class, 'show'])->name('profile-tokoh.show');
-
-Route::get('/reference', function () {
-    return view('reference');
-})->name('reference');
 
 Route::get('/about-us', function () {
     return view('about-us');
 })->name('about-us');
 
-Route::get('/tambah-tokoh', [App\Http\Controllers\BiografiController::class, 'create'])
-    ->middleware('auth')
-    ->name('tambah-tokoh');
+Route::get('/reference', function () {
+    return view('reference');
+})->name('reference');
 
-Route::post('/tambah-tokoh', [App\Http\Controllers\BiografiController::class, 'store'])
-    ->middleware('auth')
-    ->name('tambah-tokoh.store');
+// Sitemap route
+Route::get('/sitemap.xml', function () {
+    $biografis = \App\Models\Biografi::where('status', 'published')->get();
+    return response()->view('sitemap', compact('biografis'))
+        ->header('Content-Type', 'application/xml');
+})->name('sitemap');
 
-// User authentication routes (custom, bukan Breeze)
-Route::middleware('guest')->group(function () {
-    Route::get('/login', [UserAuthController::class, 'showLoginForm'])->name('login');
-    Route::post('/login', [UserAuthController::class, 'login']);
-    
-    Route::get('/register', [UserRegisterController::class, 'showRegistrationForm'])->name('register');
-    Route::post('/register', [UserRegisterController::class, 'register']);
+// Profile Tokoh (Biography listing and detail)
+Route::get('/profile-tokoh', [BiografiController::class, 'index'])->name('profile-tokoh');
+Route::get('/profile-tokoh/{tokoh:slug}', [BiografiController::class, 'show'])->name('profile-tokoh.show');
+
+// Add Biography (requires authentication)
+Route::middleware('auth')->group(function () {
+    Route::get('/tambah-tokoh', [BiografiController::class, 'create'])->name('tambah-tokoh');
+    Route::post('/tambah-tokoh', [BiografiController::class, 'store'])->name('tambah-tokoh.store');
 });
 
-// User authenticated routes
-Route::middleware(['auth'])->group(function () {
-    // Logout
-    Route::post('/logout', [UserAuthController::class, 'logout'])->name('logout');
-    
-    // Profile routes (available for all authenticated users)
+// User Dashboard Routes (requires authentication)
+Route::middleware(['auth'])->prefix('user')->name('user.')->group(function () {
+    Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('dashboard');
+    Route::delete('/biografi/{biografi}', [UserDashboardController::class, 'destroy'])->name('biografi.destroy');
+    Route::get('/biografi/{biografi}/edit', [UserDashboardController::class, 'edit'])->name('biografi.edit');
+    Route::put('/biografi/{biografi}', [UserDashboardController::class, 'update'])->name('biografi.update');
+});
+
+// Profile Routes (Laravel Breeze default)
+Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+// Authentication Routes
+require __DIR__.'/auth.php';
