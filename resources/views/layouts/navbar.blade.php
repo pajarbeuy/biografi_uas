@@ -1,4 +1,4 @@
-<nav class="bg-white shadow-md border-b-2 border-gray-200 mb-16">
+<nav x-data="{ open: false }" class="bg-white shadow-md border-b-2 border-gray-200 mb-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
             <!-- Logo/Brand -->
@@ -8,70 +8,91 @@
                 </a>
             </div>
 
-            <!-- Main Navigation Menu -->
+            <!-- Main Navigation Menu (Desktop) -->
             <div class="hidden md:flex items-center space-x-8">
-                <a href="/home" class="text-md font-medium text-gray-700 hover:text-blue-600 transition-colors">
-                    Home
-                </a>
-                <a href="/profile-tokoh" class="text-md font-medium text-gray-700 hover:text-blue-600 transition-colors">
-                    Profile Tokoh
-                </a>
-                <a href="/reference" class="text-md font-medium text-gray-700 hover:text-blue-600 transition-colors">
-                    Reference
-                </a>
-                <a href="/about-us" class="text-md font-medium text-gray-700 hover:text-blue-600 transition-colors">
-                    About Us
-                </a>
-                <a href="/tambah-tokoh" class="text-md font-medium text-gray-700 hover:text-blue-600 transition-colors">
-                    Tambah Tokoh
-                </a>
-                </div>
-
-            <!-- Auth Buttons -->
-            <div class="flex items-center space-x-8">
+                <a href="/home" class="text-md font-medium text-gray-700 hover:text-blue-600 transition-colors">Home</a>
+                <a href="/profile-tokoh" class="text-md font-medium text-gray-700 hover:text-blue-600 transition-colors">Profile Tokoh</a>
+                <a href="/reference" class="text-md font-medium text-gray-700 hover:text-blue-600 transition-colors">Reference</a>
+                <a href="/about-us" class="text-md font-medium text-gray-700 hover:text-blue-600 transition-colors">About Us</a>
                 @auth
-                    <!-- User is logged in -->
+                    @if(!auth()->user()->isAdmin() && !auth()->user()->isSuperAdmin())
+                        <a href="/tambah-tokoh" class="text-md font-medium text-gray-700 hover:text-blue-600 transition-colors">Tambah Tokoh</a>
+                    @endif
+                @endauth
+            </div>
+
+            <!-- Auth Buttons (Desktop) -->
+            <div class="hidden md:flex items-center space-x-4">
+                @auth
                     <span class="text-sm text-black">
                         Halo, <span class="font-semibold">{{ auth()->user()->name }}</span>
                     </span>
                     
-                    <!-- Dashboard Admin Link - Only for Admin & SuperAdmin -->
-                    @if(auth()->user()->isAdmin() || auth()->user()->isSuperAdmin())
-                        <a href="/admin" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-                            </svg>
-                            Dashboard Admin
+                    @if(!auth()->user()->isAdmin() && !auth()->user()->isSuperAdmin())
+                        <a href="{{ route('user.dashboard') }}" class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-lg transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                            Dashboard
                         </a>
                     @endif
                     
-                    <!-- Logout Button -->
+                    @if(auth()->user()->isAdmin() || auth()->user()->isSuperAdmin())
+                        <a href="/admin" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            Admin
+                        </a>
+                    @endif
+                    
                     <form method="POST" action="{{ route('logout') }}" class="inline">
                         @csrf
                         <button type="submit" class="inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-lg transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
-                            </svg>
                             Logout
                         </button>
                     </form>
                 @else
-                    <!-- User is guest -->
                     <a href="{{ route('login') }}" class="inline-flex items-center px-4 py-2 bg-white border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white text-sm font-semibold rounded-lg transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
-                        </svg>
                         Login
                     </a>
-                    
-                    <a href="{{ route('register') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 border-2 border-blue-600 hover:bg-blue-700 hover:border-blue-700 text-black text-sm font-semibold rounded-lg transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
-                        </svg>
+                    <a href="{{ route('register') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 border-2 border-blue-600 hover:bg-blue-700 hover:border-blue-700 text-white text-sm font-semibold rounded-lg transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                         Daftar
                     </a>
                 @endauth
             </div>
+
+            <!-- Hamburger Button (Mobile) -->
+            <div class="md:hidden flex items-center">
+                <button @click="open = !open" class="text-gray-700 hover:text-blue-600 focus:outline-none">
+                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                        <path :class="{'hidden': open, 'inline-flex': !open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        <path :class="{'hidden': !open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div x-show="open" @click.away="open = false" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95" class="md:hidden bg-white border-t border-gray-100 px-4 py-4 space-y-2 pb-6">
+        <a href="/home" class="block text-base font-medium text-gray-700 hover:text-blue-600 py-2">Home</a>
+        <a href="/profile-tokoh" class="block text-base font-medium text-gray-700 hover:text-blue-600 py-2">Profile Tokoh</a>
+        <a href="/reference" class="block text-base font-medium text-gray-700 hover:text-blue-600 py-2">Reference</a>
+        <a href="/about-us" class="block text-base font-medium text-gray-700 hover:text-blue-600 py-2">About Us</a>
+        <a href="/tambah-tokoh" class="block text-base font-medium text-gray-700 hover:text-blue-600 py-2">Tambah Tokoh</a>
+        
+        <div class="pt-4 border-t border-gray-100 space-y-3">
+            @auth
+                <div class="text-sm font-semibold text-gray-900 mb-2 px-1">Halo, {{ auth()->user()->name }}</div>
+                @if(!auth()->user()->isAdmin() && !auth()->user()->isSuperAdmin())
+                    <a href="{{ route('user.dashboard') }}" class="block w-full text-center px-4 py-2 bg-green-600 text-white rounded-lg font-semibold">Dashboard</a>
+                @endif
+                @if(auth()->user()->isAdmin() || auth()->user()->isSuperAdmin())
+                    <a href="/admin" class="block w-full text-center px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold">Admin Panel</a>
+                @endif
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="w-full px-4 py-2 bg-red-600 text-white rounded-lg font-semibold">Logout</button>
+                </form>
+            @else
+                <a href="{{ route('login') }}" class="block w-full text-center px-4 py-2 border-2 border-blue-600 text-blue-600 rounded-lg font-semibold">Login</a>
+                <a href="{{ route('register') }}" class="block w-full text-center px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold">Daftar</a>
+            @endauth
         </div>
     </div>
 </nav>

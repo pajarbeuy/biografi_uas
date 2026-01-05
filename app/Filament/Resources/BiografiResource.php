@@ -44,6 +44,13 @@ class BiografiResource extends Resource
                     ->nullable()
                     ->maxLength(255),
                 
+                Forms\Components\Textarea::make('education')
+                    ->label('Pendidikan')
+                    ->nullable()
+                    ->rows(4)
+                    ->placeholder('Contoh: S1 Matematika di Universitas Göttingen (1799)')
+                    ->columnSpanFull(),
+                
                 Forms\Components\DatePicker::make('birth_date')
                     ->label('Tanggal Lahir')
                     ->nullable()
@@ -73,22 +80,64 @@ class BiografiResource extends Resource
                     ->required()
                     ->columnSpanFull(),
                 
+                Forms\Components\Repeater::make('references')
+                    ->relationship('references')
+                    ->label('Referensi atau Sumber')
+                    ->schema([
+                        Forms\Components\TextInput::make('title')
+                            ->label('Judul Referensi')
+                            ->required()
+                            ->columnSpanFull(),
+                        Forms\Components\TextInput::make('author')
+                            ->label('Penulis')
+                            ->nullable(),
+                        Forms\Components\TextInput::make('year')
+                            ->label('Tahun')
+                            ->nullable()
+                            ->maxLength(4),
+                        Forms\Components\TextInput::make('url')
+                            ->label('URL')
+                            ->url()
+                            ->nullable()
+                            ->columnSpanFull(),
+                        Forms\Components\Select::make('type')
+                            ->label('Tipe')
+                            ->options([
+                                'website' => 'Website',
+                                'book' => 'Buku',
+                                'paper' => 'Paper/Jurnal',
+                                'article' => 'Artikel',
+                                'other' => 'Lainnya',
+                            ])
+                            ->default('website')
+                            ->required(),
+                    ])
+                    ->columns(2)
+                    ->collapsible()
+                    ->cloneable()
+                    ->columnSpanFull()
+                    ->defaultItems(0),
+                
                 Forms\Components\FileUpload::make('image_path')
                     ->label('Foto Tokoh')
                     ->disk('public')
                     ->visibility('public')
                     ->image()
-                    ->imageEditor()
+                    // ->imageEditor()
                     ->nullable(),
                 
                 Forms\Components\Select::make('status')
                     ->label('Status')
                     ->options([
                         'draft' => 'Draft',
+                        'pending' => 'Pending Review',
+                        'approved' => 'Approved',
+                        'rejected' => 'Rejected',
                         'published' => 'Published',
                     ])
                     ->default('draft')
-                    ->required(),
+                    ->required()
+                    ->helperText('Draft: Belum selesai | Pending: Menunggu review | Approved: Disetujui | Rejected: Ditolak | Published: Dipublikasikan'),
                 
                 Forms\Components\Hidden::make('user_id')
                     ->default(auth()->id())
@@ -124,9 +173,20 @@ class BiografiResource extends Resource
                 Tables\Columns\BadgeColumn::make('status')
                     ->label('Status')
                     ->colors([
-                        'danger' => 'draft',
-                        'success' => 'published',
+                        'secondary' => 'draft',
+                        'warning' => 'pending',
+                        'success' => 'approved',
+                        'danger' => 'rejected',
+                        'primary' => 'published',
                     ])
+                    ->formatStateUsing(fn (string $state): string => match($state) {
+                        'draft' => 'Draft',
+                        'pending' => 'Pending',
+                        'approved' => 'Approved',
+                        'rejected' => 'Rejected',
+                        'published' => 'Published',
+                        default => $state,
+                    })
                     ->sortable(),
                 Tables\Columns\ImageColumn::make('image_path')
                     ->label('Foto')
@@ -140,16 +200,79 @@ class BiografiResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('status')
+                    ->options([
+                        'draft' => 'Draft',
+                        'pending' => 'Pending Review',
+                        'approved' => 'Approved',
+                        'rejected' => 'Rejected',
+                        'published' => 'Published',
+                    ]),
+                Tables\Filters\SelectFilter::make('category')
+                    ->relationship('category', 'name')
+                    ->label('Kategori'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('approve')
+                    ->label('Approve')
+                    ->icon('heroicon-o-check-circle')
+                    ->color('success')
+                    ->requiresConfirmation()
+                    ->action(fn ($record) => $record->approve())
+                    ->visible(fn ($record) => in_array($record->status, ['pending', 'draft'])),
+                Tables\Actions\Action::make('reject')
+                    ->label('Reject')
+                    ->icon('heroicon-o-x-circle')
+                    ->color('danger')
+                    ->requiresConfirmation()
+                    ->action(fn ($record) => $record->reject())
+                    ->visible(fn ($record) => $record->status === 'pending'),
+                Tables\Actions\Action::make('publish')
+                    ->label('Publish')
+                    ->icon('heroicon-o-globe-alt')
+                    ->color('primary')
+                    ->requiresConfirmation()
+                    ->action(fn ($record) => $record->publish())
+                    ->visible(fn ($record) => $record->status === 'approved'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\BulkAction::make('approve')
+                        ->label('Approve Selected')
+                        ->icon('heroicon-o-check-circle')
+                        ->color('success')
+                        ->requiresConfirmation()
+                        ->action(function ($records) {
+                            foreach ($records as $record) {
+                                $record->approve();
+                            }
+                        }),
+                    Tables\Actions\BulkAction::make('reject')
+                        ->label('Reject Selected')
+                        ->icon('heroicon-o-x-circle')
+                        ->color('danger')
+                        ->requiresConfirmation()
+                        ->action(function ($records) {
+                            foreach ($records as $record) {
+                                $record->reject();
+                            }
+                        }),
+                    Tables\Actions\BulkAction::make('publish')
+                        ->label('Publish Selected')
+                        ->icon('heroicon-o-globe-alt')
+                        ->color('primary')
+                        ->requiresConfirmation()
+                        ->action(function ($records) {
+                            foreach ($records as $record) {
+                                $record->publish();
+                            }
+                        }),
                 ]),
-            ]);
+            ])
+            ->defaultPaginationPageOption(5) // Default 10 items per halaman
+            ->paginationPageOptions([5, 10, 25, 50, 100]); // Options yang bisa dipilih
     }
 
     public static function getRelations(): array

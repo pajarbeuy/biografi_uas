@@ -130,9 +130,9 @@
 <main class="flex-grow container mx-auto px-4 py-12">
 
     <!-- TITLE -->
-    <div class="text-center mb-20">
+    <div class="text-center mb-12 md:mb-20">
        
-        <p class="text-slate-700 text-xl max-w-2xl mx-auto mb-6 font-bold">
+        <p class="text-slate-700 text-lg md:text-xl max-w-2xl mx-auto mb-6 font-bold px-4">
             Menjelajahi kehidupan dan karya para jenius yang membentuk pemahaman kita.
         </p>
     </div>
@@ -203,15 +203,15 @@ $tokohs = [
     bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition">
 
     <div id="modalContent"
-        class="bg-white rounded-3xl shadow-2xl w-full max-w-lg mx-4 p-8
+        class="bg-white rounded-3xl shadow-2xl w-full max-w-lg mx-4 p-6 md:p-8
         animate-[modalCinematic_0.6s_cubic-bezier(0.22,1,0.36,1)_forwards]">
 
         <div class="flex justify-between items-center mb-6">
-            <h2 id="modalName" class="text-3xl font-bold"></h2>
-            <button onclick="closeModal()" class="text-slate-400 hover:text-red-500 text-2xl">✕</button>
+            <h2 id="modalName" class="text-2xl md:text-3xl font-bold"></h2>
+            <button onclick="closeModal()" class="text-slate-400 hover:text-red-500 text-2xl px-2">✕</button>
         </div>
 
-        <p id="modalDesc" class="text-lg text-slate-600"></p>
+        <p id="modalDesc" class="text-base md:text-lg text-slate-600"></p>
 
         <div class="mt-8 text-right">
             <button onclick="closeModal()"

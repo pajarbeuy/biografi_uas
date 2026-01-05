@@ -20,6 +20,8 @@ class UserResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
     protected static ?string $navigationLabel = 'User Management';
+    
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {
@@ -84,12 +86,7 @@ class UserResource extends Resource
                 ]),
             ])
             ->headerActions([
-                Tables\Actions\Action::make('home')
-                    ->label('Ke Home')
-                    ->icon('heroicon-o-home')
-                    ->color('success')
-                    ->url(route('home'))
-                    ->openUrlInNewTab(false),
+                //
             ]);
     }
 

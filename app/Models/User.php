@@ -5,10 +5,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements FilamentUser
 {
-    use Notifiable;
+    use Notifiable, HasRoles;
 
     protected $fillable = [
         'name',
@@ -27,28 +28,46 @@ class User extends Authenticatable implements FilamentUser
         'password' => 'hashed',
     ];
 
-    // Helper methods untuk check role
+    // Helper methods untuk check role (using Spatie Permission)
     public function isSuperAdmin()
     {
-        return $this->role === 'superadmin';
+        // Use Spatie's hasRole if roles are assigned, fallback to column
+        return $this->hasRole('superadmin') || $this->role === 'superadmin';
     }
 
     public function isAdmin()
     {
-        return $this->role === 'admin';
+        // Use Spatie's hasRole if roles are assigned, fallback to column
+        return $this->hasRole('admin') || $this->role === 'admin';
     }
 
     public function isUser()
     {
-        return $this->role === 'user';
+        // Use Spatie's hasRole if roles are assigned, fallback to column
+        return $this->hasRole('user') || $this->role === 'user';
     }
 
-    public function hasRole($role)
+    /**
+     * Override Spatie's hasRole to include column fallback
+     */
+    public function hasRole($roles, string $guard = null): bool
     {
-        if (is_array($role)) {
-            return in_array($this->role, $role);
+        // First check using Spatie's method
+        if (method_exists(get_parent_class($this), 'hasRole')) {
+            try {
+                if (parent::hasRole($roles, $guard)) {
+                    return true;
+                }
+            } catch (\Exception $e) {
+                // If Spatie check fails, continue to fallback
+            }
         }
-        return $this->role === $role;
+        
+        // Fallback to manual column check for backward compatibility
+        if (is_array($roles)) {
+            return in_array($this->role, $roles);
+        }
+        return $this->role === $roles;
     }
 
     /**

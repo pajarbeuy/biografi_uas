@@ -3,34 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah Tokoh - BIOTOMA</title>
+    <title>Edit Biografi - BIOTOMA</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         /* Custom gradient background */
         .bio-gradient {
             background: linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #fcd34d 100%);
-        }
-        
-        /* Floating label effect */
-        .form-group {
-            position: relative;
-        }
-        
-        .form-input:focus ~ .form-label,
-        .form-input:not(:placeholder-shown) ~ .form-label {
-            transform: translateY(-1.5rem) scale(0.85);
-            color: #d97706;
-        }
-        
-        .form-label {
-            position: absolute;
-            left: 1rem;
-            top: 0.75rem;
-            transition: all 0.2s;
-            pointer-events: none;
-            color: #6b7280;
-            background: white;
-            padding: 0 0.25rem;
         }
         
         /* Image preview container */
@@ -56,20 +34,27 @@
             <div class="text-center mb-12">
                 <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full mb-4 shadow-lg">
                     <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                     </svg>
                 </div>
-                <h1 class="text-3xl md:text-5xl font-bold bg-gradient-to-r from-amber-700 via-orange-600 to-amber-700 bg-clip-text text-transparent mb-3">
-                    Tambah Tokoh Matematikawan
+                <h1 class="text-5xl font-bold bg-gradient-to-r from-amber-700 via-orange-600 to-amber-700 bg-clip-text text-transparent mb-3">
+                    Edit Biografi
                 </h1>
                 <p class="text-lg text-amber-800/80 max-w-2xl mx-auto">
-                    Kontribusikan kisah inspiratif matematikawan untuk generasi mendatang
+                    Perbarui informasi biografi yang telah Anda submit
                 </p>
-                <div class="mt-4 inline-flex items-center gap-2 bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm font-medium">
+                
+                <!-- Status Badge -->
+                <div class="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium
+                    @if($biografi->status === 'draft')
+                        bg-gray-100 text-gray-800
+                    @else
+                        bg-red-100 text-red-800
+                    @endif">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
-                    Biografi akan direview oleh admin sebelum dipublikasikan
+                    Biografi akan direview ulang oleh admin setelah diupdate
                 </div>
             </div>
             
@@ -105,22 +90,23 @@
             @endif
             
             <!-- Form Card -->
-            <form action="{{ route('tambah-tokoh.store') }}" method="POST" enctype="multipart/form-data" 
+            <form action="{{ route('user.biografi.update', $biografi->id) }}" method="POST" enctype="multipart/form-data" 
                   class="bg-white/90 backdrop-blur-sm shadow-2xl rounded-3xl overflow-hidden border border-amber-100">
                 @csrf
+                @method('PUT')
                 
                 <!-- Form Header -->
-                <div class="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-500 px-6 md:px-8 py-6">
-                    <h2 class="text-xl md:text-2xl font-bold text-white flex items-center">
+                <div class="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-500 px-8 py-6">
+                    <h2 class="text-2xl font-bold text-white flex items-center">
                         <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                         </svg>
                         Informasi Tokoh
                     </h2>
-                    <p class="text-amber-50 mt-1 text-sm">Lengkapi data biografi dengan teliti dan akurat</p>
+                    <p class="text-amber-50 mt-1 text-sm">Perbarui data biografi dengan teliti dan akurat</p>
                 </div>
                 
-                <div class="p-6 md:p-10">
+                <div class="p-8 md:p-10">
                     <!-- Grid Layout for Form Fields -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         
@@ -135,7 +121,7 @@
                             <input type="text" 
                                    id="name" 
                                    name="name" 
-                                   value="{{ old('name') }}"
+                                   value="{{ old('name', $biografi->name) }}"
                                    class="w-full px-5 py-3.5 border-2 border-amber-200 rounded-xl focus:ring-4 focus:ring-amber-300 focus:border-amber-500 transition-all duration-200 bg-white/50 placeholder-amber-300 text-gray-800 font-medium @error('name') border-red-400 @enderror"
                                    placeholder="Contoh: Carl Friedrich Gauss"
                                    required>
@@ -151,8 +137,8 @@
                         
                         <!-- Tempat Lahir -->
                         <div>
-                            <label for="birth_place" class="block text-sm font-bold text-amber-900 mb-2 flex items-center">
-                                <svg class="w-4 h-4 mr-2 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <label for="birth_place" class="block text-sm font-bold text-blue-900 mb-2 flex items-center">
+                                <svg class="w-4 h-4 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                                 </svg>
@@ -161,7 +147,7 @@
                             <input type="text" 
                                    id="birth_place" 
                                    name="birth_place" 
-                                   value="{{ old('birth_place') }}"
+                                   value="{{ old('birth_place', $biografi->birth_place) }}"
                                    class="w-full px-5 py-3.5 border-2 border-amber-200 rounded-xl focus:ring-4 focus:ring-amber-300 focus:border-amber-500 transition-all duration-200 bg-white/50 placeholder-amber-300 text-gray-800 @error('birth_place') border-red-400 @enderror"
                                    placeholder="Contoh: Brunswick, Jerman">
                             @error('birth_place')
@@ -176,8 +162,8 @@
                         
                         {{-- Pendidikan --}}
                         <div class="md:col-span-2">
-                            <label for="education" class="block text-sm font-bold text-amber-900 mb-2 flex items-center">
-                                <svg class="w-4 h-4 mr-2 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <label for="education" class="block text-sm font-bold text-blue-900 mb-2 flex items-center">
+                                <svg class="w-4 h-4 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/>
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
                                 </svg>
@@ -187,7 +173,7 @@
                                       name="education" 
                                       rows="4"
                                       class="w-full px-5 py-3.5 border-2 border-amber-200 rounded-xl focus:ring-4 focus:ring-amber-300 focus:border-amber-500 transition-all duration-200 bg-white/50 placeholder-amber-300 text-gray-800 resize-none @error('education') border-red-400 @enderror"
-                                      placeholder="Contoh: S1 Matematika di Universitas Göttingen (1799)">{{ old('education') }}</textarea>
+                                      placeholder="Contoh: S1 Matematika di Universitas Göttingen (1799)">{{ old('education', $biografi->education) }}</textarea>
                             @error('education')
                                 <p class="mt-2 text-sm text-red-600 flex items-center">
                                     <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -198,10 +184,10 @@
                             @enderror
                         </div>
                         
-                        {{-- Cabang Matematika --}}
+                        <!-- Cabang Matematika -->
                         <div>
-                            <label for="category_id" class="block text-sm font-bold text-amber-900 mb-2 flex items-center">
-                                <svg class="w-4 h-4 mr-2 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <label for="category_id" class="block text-sm font-bold text-blue-900 mb-2 flex items-center">
+                                <svg class="w-4 h-4 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/>
                                 </svg>
                                 Cabang Matematika
@@ -211,7 +197,7 @@
                                     class="w-full px-5 py-3.5 border-2 border-amber-200 rounded-xl focus:ring-4 focus:ring-amber-300 focus:border-amber-500 transition-all duration-200 bg-white/50 text-gray-800 @error('category_id') border-red-400 @enderror">
                                 <option value="">-- Pilih Cabang Matematika --</option>
                                 @foreach($categories as $category)
-                                    <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                    <option value="{{ $category->id }}" {{ old('category_id', $biografi->category_id) == $category->id ? 'selected' : '' }}>
                                         {{ $category->name }}
                                     </option>
                                 @endforeach
@@ -228,8 +214,8 @@
                         
                         <!-- Tanggal Lahir -->
                         <div>
-                            <label for="birth_date" class="block text-sm font-bold text-amber-900 mb-2 flex items-center">
-                                <svg class="w-4 h-4 mr-2 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <label for="birth_date" class="block text-sm font-bold text-blue-900 mb-2 flex items-center">
+                                <svg class="w-4 h-4 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                                 </svg>
                                 Tanggal Lahir
@@ -237,7 +223,7 @@
                             <input type="date" 
                                    id="birth_date" 
                                    name="birth_date" 
-                                   value="{{ old('birth_date') }}"
+                                   value="{{ old('birth_date', $biografi->birth_date) }}"
                                    class="w-full px-5 py-3.5 border-2 border-amber-200 rounded-xl focus:ring-4 focus:ring-amber-300 focus:border-amber-500 transition-all duration-200 bg-white/50 text-gray-800 @error('birth_date') border-red-400 @enderror">
                             @error('birth_date')
                                 <p class="mt-2 text-sm text-red-600 flex items-center">
@@ -251,8 +237,8 @@
                         
                         <!-- Tanggal Meninggal -->
                         <div>
-                            <label for="death_date" class="block text-sm font-bold text-amber-900 mb-2 flex items-center">
-                                <svg class="w-4 h-4 mr-2 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <label for="death_date" class="block text-sm font-bold text-blue-900 mb-2 flex items-center">
+                                <svg class="w-4 h-4 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                                 </svg>
                                 Tanggal Meninggal
@@ -260,7 +246,7 @@
                             <input type="date" 
                                    id="death_date" 
                                    name="death_date" 
-                                   value="{{ old('death_date') }}"
+                                   value="{{ old('death_date', $biografi->death_date) }}"
                                    class="w-full px-5 py-3.5 border-2 border-amber-200 rounded-xl focus:ring-4 focus:ring-amber-300 focus:border-amber-500 transition-all duration-200 bg-white/50 text-gray-800 @error('death_date') border-red-400 @enderror">
                             @error('death_date')
                                 <p class="mt-2 text-sm text-red-600 flex items-center">
@@ -274,8 +260,8 @@
                         
                         <!-- Prestasi -->
                         <div class="md:col-span-2">
-                            <label for="achievements" class="block text-sm font-bold text-amber-900 mb-2 flex items-center">
-                                <svg class="w-4 h-4 mr-2 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <label for="achievements" class="block text-sm font-bold text-blue-900 mb-2 flex items-center">
+                                <svg class="w-4 h-4 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
                                 </svg>
                                 Prestasi & Kontribusi
@@ -284,7 +270,7 @@
                                       name="achievements" 
                                       rows="5"
                                       class="w-full px-5 py-3.5 border-2 border-amber-200 rounded-xl focus:ring-4 focus:ring-amber-300 focus:border-amber-500 transition-all duration-200 bg-white/50 placeholder-amber-300 text-gray-800 resize-none @error('achievements') border-red-400 @enderror"
-                                      placeholder="Contoh: Menemukan teorema dasar aljabar, mengembangkan distribusi normal dalam statistika...">{{ old('achievements') }}</textarea>
+                                      placeholder="Contoh: Menemukan teorema dasar aljabar, mengembangkan distribusi normal dalam statistika...">{{ old('achievements', $biografi->achievements) }}</textarea>
                             @error('achievements')
                                 <p class="mt-2 text-sm text-red-600 flex items-center">
                                     <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -297,8 +283,8 @@
                         
                         <!-- Kisah Hidup -->
                         <div class="md:col-span-2">
-                            <label for="life_story" class="block text-sm font-bold text-amber-900 mb-2 flex items-center">
-                                <svg class="w-4 h-4 mr-2 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <label for="life_story" class="block text-sm font-bold text-blue-900 mb-2 flex items-center">
+                                <svg class="w-4 h-4 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
                                 </svg>
                                 Kisah Hidup <span class="text-red-500 ml-1">*</span>
@@ -308,7 +294,7 @@
                                       rows="12"
                                       class="w-full px-5 py-3.5 border-2 border-amber-200 rounded-xl focus:ring-4 focus:ring-amber-300 focus:border-amber-500 transition-all duration-200 bg-white/50 placeholder-amber-300 text-gray-800 resize-none @error('life_story') border-red-400 @enderror"
                                       placeholder="Ceritakan perjalanan hidup tokoh dari masa kecil hingga karya terbesarnya. Tulis dengan detail dan inspiratif..."
-                                      required>{{ old('life_story') }}</textarea>
+                                      required>{{ old('life_story', $biografi->life_story) }}</textarea>
                             @error('life_story')
                                 <p class="mt-2 text-sm text-red-600 flex items-center">
                                     <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -321,16 +307,53 @@
                         
                         {{-- Referensi / Sumber --}}
                         <div class="md:col-span-2">
-                            <label class="block text-sm font-bold text-amber-900 mb-3 flex items-center">
-                                <svg class="w-4 h-4 mr-2 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <label class="block text-sm font-bold text-blue-900 mb-3 flex items-center">
+                                <svg class="w-4 h-4 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
                                 </svg>
                                 Referensi / Sumber (Opsional)
                             </label>
-                            <p class="text-sm text-amber-700 mb-4">Tambahkan sumber referensi yang Anda gunakan untuk menulis biografi ini.</p>
+                            <p class="text-sm text-blue-700 mb-4">Tambahkan sumber referensi yang Anda gunakan untuk menulis biografi ini.</p>
                             
                             <div id="references-container" class="space-y-4">
-                                {{-- Dynamic reference fields akan ditambahkan di sini via JavaScript --}}
+                                {{-- Pre-populate existing references --}}
+                                @if($biografi->references && $biografi->references->count() > 0)
+                                    @foreach($biografi->references as $index => $reference)
+                                        <div class="reference-item bg-gray-50 p-4 rounded-lg border-2 border-gray-200">
+                                            <div class="flex justify-between items-center mb-3">
+                                                <h4 class="font-semibold text-gray-700">Referensi {{ $index + 1 }}</h4>
+                                                <button type="button" onclick="removeReference(this)" class="text-red-600 hover:text-red-800 font-medium text-sm">
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                                <div class="md:col-span-2">
+                                                    <input type="text" name="references[{{ $index }}][title]" value="{{ $reference->title }}" placeholder="Judul Referensi *" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                                                </div>
+                                                <div>
+                                                    <input type="text" name="references[{{ $index }}][author]" value="{{ $reference->author }}" placeholder="Penulis" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                                </div>
+                                                <div>
+                                                    <input type="text" name="references[{{ $index }}][year]" value="{{ $reference->year }}" placeholder="Tahun" maxlength="4" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                                </div>
+                                                <div class="md:col-span-2">
+                                                    <input type="url" name="references[{{ $index }}][url]" value="{{ $reference->url }}" placeholder="URL Sumber" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                                </div>
+                                                <div class="md:col-span-2">
+                                                    <select name="references[{{ $index }}][type]" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                                        <option value="website" {{ $reference->type == 'website' ? 'selected' : '' }}>Website</option>
+                                                        <option value="book" {{ $reference->type == 'book' ? 'selected' : '' }}>Buku</option>
+                                                        <option value="paper" {{ $reference->type == 'paper' ? 'selected' : '' }}>Paper/Jurnal</option>
+                                                        <option value="article" {{ $reference->type == 'article' ? 'selected' : '' }}>Artikel</option>
+                                                        <option value="other" {{ $reference->type == 'other' ? 'selected' : '' }}>Lainnya</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @endif
                             </div>
                             
                             <button type="button" 
@@ -343,14 +366,23 @@
                             </button>
                         </div>
                         
-                        {{-- Foto Tokoh --}}
+                        <!-- Foto Tokoh -->
                         <div class="md:col-span-2">
-                            <label for="image" class="block text-sm font-bold text-amber-900 mb-3 flex items-center">
-                                <svg class="w-4 h-4 mr-2 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <label for="image" class="block text-sm font-bold text-blue-900 mb-3 flex items-center">
+                                <svg class="w-4 h-4 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                                 </svg>
                                 Foto Tokoh
                             </label>
+                            
+                            <!-- Current Image -->
+                            @if($biografi->image_path)
+                                <div class="mb-4">
+                                    <p class="text-sm text-gray-600 mb-2">Foto saat ini:</p>
+                                    <img src="{{ asset('storage/' . $biografi->image_path) }}" alt="{{ $biografi->name }}" class="w-48 h-48 object-cover rounded-xl border-4 border-amber-300 shadow-md">
+                                    <p class="text-sm text-amber-600 mt-2">Upload foto baru untuk mengganti foto lama (opsional)</p>
+                                </div>
+                            @endif
                             
                             <div class="flex flex-col items-center justify-center w-full">
                                 <label for="image" class="flex flex-col items-center justify-center w-full h-48 border-3 border-amber-300 border-dashed rounded-2xl cursor-pointer bg-gradient-to-br from-amber-50 to-orange-50 hover:from-amber-100 hover:to-orange-100 transition-all duration-300 group">
@@ -379,7 +411,7 @@
                                         <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                         </svg>
-                                        Hapus Gambar
+                                        Hapus Gambar Baru
                                     </button>
                                 </div>
                             </div>
@@ -406,7 +438,7 @@
                         </p>
                         
                         <div class="flex items-center gap-4 order-1 sm:order-2">
-                            <a href="{{ route('profile-tokoh') }}" 
+                            <a href="{{ route('user.dashboard') }}" 
                                class="px-8 py-3.5 bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 rounded-xl hover:from-gray-200 hover:to-gray-300 transition-all duration-200 font-semibold shadow-md hover:shadow-lg flex items-center">
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
@@ -416,9 +448,9 @@
                             <button type="submit" 
                                     class="px-8 py-3.5 bg-gradient-to-r from-amber-500 via-orange-500 to-amber-500 text-white rounded-xl hover:from-amber-600 hover:via-orange-600 hover:to-amber-600 transition-all duration-200 font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center">
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                                 </svg>
-                                Tambah Biografi
+                                Update Biografi
                             </button>
                         </div>
                     </div>
@@ -426,105 +458,25 @@
             </form>
             
             <!-- Helper Tips Card -->
-            <div class="mt-8 bg-gradient-to-r from-blue-50 to-cyan-50 border-l-4 border-blue-400 rounded-xl p-6 shadow-md">
-                <h3 class="font-bold text-blue-900 mb-2 flex items-center">
+            <div class="mt-8 bg-gradient-to-r from-amber-50 to-yellow-50 border-l-4 border-amber-400 rounded-xl p-6 shadow-md">
+                <h3 class="font-bold text-amber-900 mb-2 flex items-center">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
-                    Tips Menulis Biografi Berkualitas
+                    Informasi
                 </h3>
-                <ul class="text-sm text-blue-800 space-y-1.5 ml-7">
-                    <li>• Tulis dengan bahasa yang jelas dan mudah dipahami</li>
-                    <li>• Sertakan pencapaian dan kontribusi penting dalam matematika</li>
-                    <li>• Gunakan sumber yang terpercaya dan faktual</li>
-                    <li>• Ceritakan secara kronologis dari masa kecil hingga karya utama</li>
+                <ul class="text-sm text-amber-800 space-y-1.5 ml-7">
+                    <li>• Setelah Anda update biografi, status akan berubah menjadi "Pending" untuk direview ulang oleh admin</li>
+                    <li>• Pastikan data yang Anda masukkan akurat dan sesuai dengan fakta</li>
+                    <li>• Foto akan tetap menggunakan foto lama jika Anda tidak mengupload foto baru</li>
                 </ul>
             </div>
         </div>
     </div>
 
+    @include('layouts.footer')
     
     <script>
-        // Reference Management
-        let referenceIndex = 0;
-        
-        function addReference() {
-            const template = `
-                <div class="reference-item bg-gradient-to-br from-gray-50 to-blue-50 border-2 border-blue-200 rounded-xl p-5" data-index="${referenceIndex}">
-                    <div class="flex justify-between items-center mb-4">
-                        <h4 class="font-bold text-gray-800 flex items-center">
-                            <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-                            </svg>
-                            Referensi #${referenceIndex + 1}
-                        </h4>
-                        <button type="button" 
-                                onclick="removeReference(${referenceIndex})" 
-                                class="px-3 py-1.5 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg text-sm font-medium transition-colors flex items-center">
-                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                            </svg>
-                            Hapus
-                        </button>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="md:col-span-2">
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Judul Referensi *</label>
-                            <input type="text" 
-                                   name="references[${referenceIndex}][title]" 
-                                   placeholder="Contoh: Mathematics for the Million" 
-                                   class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Penulis</label>
-                            <input type="text" 
-                                   name="references[${referenceIndex}][author]" 
-                                   placeholder="Contoh: Lancelot Hogben" 
-                                   class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Tahun</label>
-                            <input type="text" 
-                                   name="references[${referenceIndex}][year]" 
-                                   placeholder="Contoh: 1937" 
-                                   maxlength="4"
-                                   class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
-                        </div>
-                        <div class="md:col-span-2">
-                            <label class="block text-sm font-medium text-gray-700 mb-1">URL/Link</label>
-                            <input type="url" 
-                                   name="references[${referenceIndex}][url]" 
-                                   placeholder="https://example.com/reference" 
-                                   class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Tipe Referensi</label>
-                            <select name="references[${referenceIndex}][type]" 
-                                    class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
-                                <option value="website">Website</option>
-                                <option value="book">Buku</option>
-                                <option value="paper">Paper/Jurnal</option>
-                                <option value="article">Artikel</option>
-                                <option value="other">Lainnya</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            document.getElementById('references-container').insertAdjacentHTML('beforeend', template);
-            referenceIndex++;
-        }
-        
-        function removeReference(index) {
-            const element = document.querySelector(`[data-index="${index}"]`);
-            if (element) {
-                element.remove();
-            }
-        }
-        
-        // Image Preview Functions
         function previewImage(event) {
             const file = event.target.files[0];
             const preview = document.getElementById('image-preview');
@@ -553,8 +505,54 @@
             fileInput.value = '';
             fileName.textContent = '';
         }
+        
+        // References management
+        let referenceCounter = {{ $biografi->references ? $biografi->references->count() : 0 }};
+        
+        function addReference() {
+            const container = document.getElementById('references-container');
+            const newReference = `
+                <div class="reference-item bg-gray-50 p-4 rounded-lg border-2 border-gray-200">
+                    <div class="flex justify-between items-center mb-3">
+                        <h4 class="font-semibold text-gray-700">Referensi ${referenceCounter + 1}</h4>
+                        <button type="button" onclick="removeReference(this)" class="text-red-600 hover:text-red-800 font-medium text-sm">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div class="md:col-span-2">
+                            <input type="text" name="references[${referenceCounter}][title]" placeholder="Judul Referensi *" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                        </div>
+                        <div>
+                            <input type="text" name="references[${referenceCounter}][author]" placeholder="Penulis" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <input type="text" name="references[${referenceCounter}][year]" placeholder="Tahun" maxlength="4" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div class="md:col-span-2">
+                            <input type="url" name="references[${referenceCounter}][url]" placeholder="URL Sumber" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div class="md:col-span-2">
+                            <select name="references[${referenceCounter}][type]" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                <option value="website">Website</option>
+                                <option value="book">Buku</option>
+                                <option value="paper">Paper/Jurnal</option>
+                                <option value="article">Artikel</option>
+                                <option value="other">Lainnya</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', newReference);
+            referenceCounter++;
+        }
+        
+        function removeReference(button) {
+            button.closest('.reference-item').remove();
+        }
     </script>
-    
-    @include('layouts.footer')
 </body>
 </html>
