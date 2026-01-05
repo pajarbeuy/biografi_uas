@@ -39,6 +39,8 @@
                     </div>
                     <h3 class="text-lg font-bold text-gray-800 text-center">Difa Nisa Lutfiah</h3>
                     <p class="text-sm text-grey-600 font-semibold">NPM: 20241320013</p>
+                    <p class="text-sm text-grey-600 font-semibold">Profile Tokoh</p>
+                    <h2 class="text-lg text-grey-600 font-bold">ANGGOTA</h2>
                 </div>
             </div>
 
@@ -53,6 +55,8 @@
                     </div>
                     <h3 class="text-lg font-bold text-gray-800 text-center">Pajar</h3>
                     <p class="text-sm text-grey-600 font-semibold">NPM: 20241320026</p>
+                    <p class="text-sm text-grey-600 font-semibold text-center">Dashboard User and Admin panel, Login and Daftar</p>
+                    <h2 class="text-lg text-grey-600 font-bold">ANGGOTA</h2>
                 </div>
             </div>
 
@@ -67,6 +71,8 @@
                     </div>
                     <h3 class="text-lg font-bold text-gray-800 text-center">Aldi Sofyan</h3>
                     <p class="text-sm text-grey-600 font-semibold">NPM: 20241320037</p>
+                    <p class="text-sm text-grey-600 font-semibold">Tambah Tokoh</p>
+                    <h2 class="text-lg text-grey-600 font-bold">KETUA</h2>
                 </div>
             </div>
 
@@ -81,6 +87,8 @@
                     </div>
                     <h3 class="text-lg font-bold text-gray-800 text-center">Sobur</h3>
                     <p class="text-sm text-grey-600 font-semibold">NPM: 20241320046</p>
+                    <p class="text-sm text-grey-600 font-semibold">Detail Tokoh</p>
+                    <h2 class="text-lg text-grey-600 font-bold">ANGGOTA</h2>
                 </div>
             </div>
 
@@ -95,6 +103,8 @@
                     </div>
                     <h3 class="text-lg font-bold text-gray-800 text-center">Anggraeni Ghea Saputri</h3>
                     <p class="text-sm text-grey-600 font-semibold">NPM: 20241320002</p>
+                    <p class="text-sm text-grey-600 font-semibold">References and About Us</p>
+                    <h2 class="text-lg text-grey-600 font-bold">ANGGOTA</h2>
                 </div>
             </div>
 
@@ -109,6 +119,8 @@
                     </div>
                     <h3 class="text-lg font-bold text-gray-800 text-center">Paiton Wenda</h3>
                     <p class="text-sm text-grey-600 font-semibold">NPM: 2024132000</p>
+                    <p class="text-sm text-grey-600 font-semibold">Footer</p>
+                    <h2 class="text-lg text-grey-600 font-bold">ANGGOTA</h2>
                 </div>
             </div>
 
@@ -123,6 +135,8 @@
                     </div>
                     <h3 class="text-lg font-bold text-gray-800 text-center">Muhamad Alvin Ramadhan</h3>
                     <p class="text-sm text-grey-600 font-semibold">NPM: 20241320035</p>
+                    <p class="text-sm text-grey-600 font-semibold">Home</p>
+                    <h2 class="text-lg text-grey-600 font-bold">ANGGOTA</h2>
                 </div>
             </div>
 
