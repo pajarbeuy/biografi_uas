@@ -30,7 +30,7 @@
         <div class="grid gap-4 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             <div class="bg-white rounded-xl shadow p-5">Al-Khwarizmi</div>
             <div class="bg-white rounded-xl shadow p-5">Évariste Galois</div>
-            <div class="bg-white rounded-xl shadow p-5">Emmy Noether</div>
+            <div class="bg-white rounded-xl shadow p-5">Amalie Emmy Noether</div>
         </div>
     </div>
 
@@ -54,7 +54,7 @@
     <div>
         <h2 class="text-xl md:text-2xl font-bold mb-6">3. Kalkulus</h2>
         <div class="grid gap-4 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-            <div class="bg-white rounded-xl shadow p-5">Isaac Newton</div>
+            <div class="bg-white rounded-xl shadow p-5">Sir Isaac Newton</div>
             <div class="bg-white rounded-xl shadow p-5">Gottfried Wilhelm Leibniz</div>
             <div class="bg-white rounded-xl shadow p-5">Leonhard Euler</div>
         </div>
@@ -80,9 +80,9 @@
         </div>
     </div>
 
-    <!-- LOGIKA MATEMATIKA -->
+    <!-- ANALISIS -->
     <div>
-        <h2 class="text-xl md:text-2xl font-bold mb-6">6. Logika Matematika</h2>
+        <h2 class="text-xl md:text-2xl font-bold mb-6">6. Analisis</h2>
         <div class="grid gap-4 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             <div class="bg-white rounded-xl shadow p-5">George Boole</div>
             <div class="bg-white rounded-xl shadow p-5">Kurt Gödel</div>
@@ -90,9 +90,9 @@
         </div>
     </div>
 
-    <!-- MATEMATIKA TERAPAN -->
+    <!-- MATEMATIKA DISKRIT -->
     <div>
-        <h2 class="text-xl md:text-2xl font-bold mb-6">7. Matematika Terapan</h2>
+        <h2 class="text-xl md:text-2xl font-bold mb-6">7. Matematika Diskrit</h2>
         <div class="grid gap-4 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             <div class="bg-white rounded-xl shadow p-5">John von Neumann</div>
             <div class="bg-white rounded-xl shadow p-5">Alan Turing</div>
