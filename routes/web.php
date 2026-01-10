@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BiografiController;
 use App\Http\Controllers\UserDashboardController;
 use Illuminate\Support\Facades\Route;
@@ -51,13 +50,6 @@ Route::middleware(['auth'])->prefix('user')->name('user.')->group(function () {
     Route::delete('/biografi/{biografi}', [UserDashboardController::class, 'destroy'])->name('biografi.destroy');
     Route::get('/biografi/{biografi}/edit', [UserDashboardController::class, 'edit'])->name('biografi.edit');
     Route::put('/biografi/{biografi}', [UserDashboardController::class, 'update'])->name('biografi.update');
-});
-
-// Profile Routes (Laravel Breeze default)
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 // Authentication Routes

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -130,19 +130,19 @@
                                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
                                                                     @switch($reference->type)
                                                                         @case('book')
-                                                                            📚 Buku
+                                                                            ≡ƒôÜ Buku
                                                                             @break
                                                                         @case('paper')
-                                                                            📄 Paper/Jurnal
+                                                                            ≡ƒôä Paper/Jurnal
                                                                             @break
                                                                         @case('article')
-                                                                            📰 Artikel
+                                                                            ≡ƒô░ Artikel
                                                                             @break
                                                                         @case('website')
-                                                                            🌐 Website
+                                                                            ≡ƒîÉ Website
                                                                             @break
                                                                         @default
-                                                                            📎 {{ ucfirst($reference->type) }}
+                                                                            ≡ƒôÄ {{ ucfirst($reference->type) }}
                                                                     @endswitch
                                                                 </span>
                                                             @endif

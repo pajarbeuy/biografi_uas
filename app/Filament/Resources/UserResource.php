@@ -23,6 +23,14 @@ class UserResource extends Resource
     
     protected static ?int $navigationSort = 1;
 
+    /**
+     * Hide navigation item for non-superadmin users.
+     */
+    public static function shouldRegisterNavigation(): bool
+    {
+        return auth()->user()?->isSuperAdmin() ?? false;
+    }
+
     public static function form(Form $form): Form
     {
         return $form

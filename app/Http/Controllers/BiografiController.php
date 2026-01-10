@@ -134,6 +134,6 @@ class BiografiController extends Controller
             'viewed_at' => now(),
         ]);
         
-        return view('profile.detail', compact('tokoh', 'viewCount'));
+        return view('tokoh.detail', compact('tokoh', 'viewCount'));
     }
 }

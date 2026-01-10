@@ -10,23 +10,30 @@
     @include('layouts.navbar')
     
     <!-- HERO SECTION (PUTIH) -->
-    <div class="relative bg-white text-gray-800 py-12 md:py-20 border-b">
+    <div class="relative bg-white text-gray-800 py-20 border-b">
         <div class="container mx-auto px-4">
-            <h1 class="text-3xl md:text-5xl font-bold text-center mb-4">
+            <h1 class="text-4xl md:text-5xl font-bold text-center mb-4">
                 Tentang Kami
             </h1>
-            <p class="text-base md:text-xl text-center text-gray-600 max-w-3xl mx-auto">
+            <p class="text-lg md:text-xl text-center text-gray-600 max-w-3xl mx-auto">
                 Tim Pengembang BIOTOMA - Sistem Informasi Biografi Matematikawan
             </p>
+            <p class="text-lg md:text-lg text-center text-gray-600 max-w-xl mx-auto">
+               <span class="font-bold">  BIOTOMA </span> adalah Sistem Informasi Biografi Matematikawan
+                yang bertujuan menyediakan informasi <span class="font-bold">  tokoh Matematika </span>
+                secara edukatif dan terstruktur.Melalui pendekatan yang modern dan terintegrasi, 
+                <span class="font-bold">  BIOTOMA </span> menyediakan konten yang relevan, mudah <span class="font-bold"> dipahami </span>, serta dapat diakses oleh 
+                berbagai kalangan, mulai dari pelajar, mahasiswa, hingga praktisi.
+            </p>
+            
         </div>
     </div>
 
     <!-- TEAM SECTION -->
-    <section class="container mx-auto px-4 py-12 md:py-20">
-
+    <section class="container mx-auto px-4 py-20">
 
         <!-- GRID -->
-        <div class="grid gap-6 md:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 max-w-7xl mx-auto">
+        <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 max-w-7xl mx-auto">
 
             <!-- MEMBER 1 -->
             <div class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
@@ -39,6 +46,8 @@
                     </div>
                     <h3 class="text-lg font-bold text-gray-800 text-center">Difa Nisa Lutfiah</h3>
                     <p class="text-sm text-grey-600 font-semibold">NPM: 20241320013</p>
+                    <p class="text-sm text-grey-600 font-semibold">Profile Tokoh</p>
+                    <h2 class="text-sm text-blue-600 font-bold">ANGGOTA</h2>
                 </div>
             </div>
 
@@ -53,6 +62,8 @@
                     </div>
                     <h3 class="text-lg font-bold text-gray-800 text-center">Pajar</h3>
                     <p class="text-sm text-grey-600 font-semibold">NPM: 20241320026</p>
+                    <p class="text-sm text-grey-600 font-semibold text-center">Dashboard Admin panel and User, Login and Daftar</p>
+                    <h2 class="text-sm text-blue-600 font-bold">ANGGOTA</h2>
                 </div>
             </div>
 
@@ -67,6 +78,8 @@
                     </div>
                     <h3 class="text-lg font-bold text-gray-800 text-center">Aldi Sofyan</h3>
                     <p class="text-sm text-grey-600 font-semibold">NPM: 20241320037</p>
+                    <p class="text-sm text-grey-600 font-semibold">Tambah Tokoh</p>
+                    <h2 class="text-sm text-blue-600 font-bold">KETUA</h2>
                 </div>
             </div>
 
@@ -81,6 +94,8 @@
                     </div>
                     <h3 class="text-lg font-bold text-gray-800 text-center">Sobur</h3>
                     <p class="text-sm text-grey-600 font-semibold">NPM: 20241320046</p>
+                    <p class="text-sm text-grey-600 font-semibold">Detail Tokoh</p>
+                    <h2 class="text-sm text-blue-600 font-bold">ANGGOTA</h2>
                 </div>
             </div>
 
@@ -95,6 +110,8 @@
                     </div>
                     <h3 class="text-lg font-bold text-gray-800 text-center">Anggraeni Ghea Saputri</h3>
                     <p class="text-sm text-grey-600 font-semibold">NPM: 20241320002</p>
+                    <p class="text-sm text-grey-600 font-semibold">References and About Us</p>
+                    <h2 class="text-sm text-blue-600 font-bold">ANGGOTA</h2>
                 </div>
             </div>
 
@@ -109,6 +126,8 @@
                     </div>
                     <h3 class="text-lg font-bold text-gray-800 text-center">Paiton Wenda</h3>
                     <p class="text-sm text-grey-600 font-semibold">NPM: 2024132000</p>
+                    <p class="text-sm text-grey-600 font-semibold">Footer</p>
+                    <h2 class="text-sm text-blue-600 font-bold">ANGGOTA</h2>
                 </div>
             </div>
 
@@ -123,6 +142,8 @@
                     </div>
                     <h3 class="text-lg font-bold text-gray-800 text-center">Muhamad Alvin Ramadhan</h3>
                     <p class="text-sm text-grey-600 font-semibold">NPM: 20241320035</p>
+                    <p class="text-sm text-grey-600 font-semibold">Home</p>
+                    <h2 class="text-sm text-blue-600 font-bold">ANGGOTA</h2>
                 </div>
             </div>
 
