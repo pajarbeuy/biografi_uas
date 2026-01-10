@@ -131,6 +131,12 @@
 
     <!-- TITLE -->
     <div class="text-center mb-12 md:mb-20">
+        <!-- Logo BIOTOMA -->
+        <div class="mb-8" style="animation: titleReveal 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;">
+            <img src="{{ asset('images/biotoma-logo.png') }}" 
+                 alt="BIOTOMA Logo" 
+                 class="mx-auto w-80 md:w-64 lg:w-70 h-auto drop-shadow-lg">
+        </div>
        
         <p class="text-slate-700 text-lg md:text-xl max-w-2xl mx-auto mb-6 font-bold px-4">
             Menjelajahi kehidupan dan karya para jenius yang membentuk pemahaman kita.
