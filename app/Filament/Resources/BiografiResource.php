@@ -121,8 +121,11 @@ class BiografiResource extends Resource
                 Forms\Components\FileUpload::make('image_path')
                     ->label('Foto Tokoh')
                     ->disk('public')
+                    ->directory('') // Save directly in public disk root
                     ->visibility('public')
                     ->image()
+                    ->imagePreviewHeight('250')
+                    ->maxSize(2048) // 2MB max
                     // ->imageEditor()
                     ->nullable(),
                 
@@ -190,7 +193,12 @@ class BiografiResource extends Resource
                     ->sortable(),
                 Tables\Columns\ImageColumn::make('image_path')
                     ->label('Foto')
-                    ->disk('public')
+                    ->getStateUsing(function ($record) {
+                        if (!$record->image_path) {
+                            return null;
+                        }
+                        return asset('storage/' . $record->image_path);
+                    })
                     ->square()
                     ->size(50),
                 Tables\Columns\TextColumn::make('created_at')
