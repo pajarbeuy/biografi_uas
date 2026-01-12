@@ -121,12 +121,14 @@ class BiografiResource extends Resource
                 Forms\Components\FileUpload::make('image_path')
                     ->label('Foto Tokoh')
                     ->disk('public')
-                    ->directory('') // Save directly in public disk root
+                    ->directory('biografi-images')
                     ->visibility('public')
                     ->image()
                     ->imagePreviewHeight('250')
-                    ->maxSize(2048) // 2MB max
-                    // ->imageEditor()
+                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/jpg', 'image/webp'])
+                    ->previewable(false)  // Disable preview to fix loading issue
+                    ->downloadable()
+                    ->openable()
                     ->nullable(),
                 
                 Forms\Components\Select::make('status')
