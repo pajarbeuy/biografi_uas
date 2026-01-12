@@ -124,8 +124,24 @@ class BiografiResource extends Resource
                     ->directory('biografi-images')
                     ->visibility('public')
                     ->image()
-                    ->imagePreviewHeight('250')
+                    ->imagePreviewHeight('200')  // Optimal preview height
+                    ->maxSize(2048)  // Max 2MB to prevent large file issues
                     ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/jpg', 'image/webp'])
+                    ->getUploadedFileNameForStorageUsing(function ($file, $get) {
+                        // Get slug from form state
+                        $slug = $get('slug');
+                        
+                        // If slug is empty (shouldn't happen due to auto-generation), use original name
+                        if (empty($slug)) {
+                            $slug = \Illuminate\Support\Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
+                        }
+                        
+                        // Get file extension
+                        $extension = $file->getClientOriginalExtension();
+                        
+                        // Return formatted filename: slug.extension
+                        return "{$slug}.{$extension}";
+                    })
                     ->previewable(false)  // Disable preview to fix loading issue
                     ->downloadable()
                     ->openable()
