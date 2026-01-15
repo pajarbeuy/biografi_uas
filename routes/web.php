@@ -16,7 +16,8 @@ Route::get('/', function () {
 });
 
 Route::get('/home', function () {
-    return view('home');
+    $biografis = \App\Models\Biografi::where('status', 'published')->get();
+    return view('home', compact('biografis'));
 })->name('home');
 
 Route::get('/about-us', function () {
