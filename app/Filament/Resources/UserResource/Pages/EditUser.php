@@ -16,4 +16,17 @@ class EditUser extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
+
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        // Jika password kosong, hapus dari data untuk tidak mengupdate field password
+        if (empty($data['password'])) {
+            unset($data['password']);
+        } else {
+            // Jika password diisi, hash password sebelum disimpan
+            $data['password'] = bcrypt($data['password']);
+        }
+
+        return $data;
+    }
 }
