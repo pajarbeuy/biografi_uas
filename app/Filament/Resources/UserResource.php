@@ -45,7 +45,12 @@ class UserResource extends Resource
                     ->unique(User::class, 'email', ignoreRecord: true),
                 Forms\Components\TextInput::make('password')
                     ->password()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->required(fn (string $operation): bool => $operation === 'create')
+                    ->dehydrated(fn ($state) => filled($state))
+                    ->helperText(fn (string $operation): ?string => 
+                        $operation === 'edit' ? 'Kosongkan jika tidak ingin mengubah password' : null
+                    ),
                 Forms\Components\Select::make('role')
                     ->options([
                         'user' => 'User',
