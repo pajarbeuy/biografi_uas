@@ -124,7 +124,7 @@
     </style>
 </head>
 
-<body class="bg-slate-50 min-h-screen flex flex-col font-sans">
+<body class="bg-red-500 min-h-screen flex flex-col font-sans">
 @include('layouts.navbar')
 
 <main class="flex-grow container mx-auto px-4 py-12">
@@ -135,7 +135,7 @@
         <div class="mb-8" style="animation: titleReveal 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;">
             <img src="{{ asset('images/biotoma-logo.png') }}" 
                  alt="BIOTOMA Logo" 
-                 class="mx-auto w-80 md:w-64 lg:w-70 h-auto drop-shadow-lg">
+                 class="mx-auto w-32 md:w-40 lg:w-80 max-w-full h-auto drop-shadow-lg">
         </div>
        
         <p class="text-slate-700 text-lg md:text-xl max-w-2xl mx-auto mb-6 font-bold px-4">
@@ -143,59 +143,20 @@
         </p>
     </div>
 
-@php
-$tokohs = [
-    // Aljabar
-    ['nama'=>'Al-Khwarizmi', 'penjelasan'=>'Bapak Aljabar dan sistem angka modern.'],
-    ['nama'=>'Évariste Galois', 'penjelasan'=>'Teori Galois dan aljabar abstrak.'],
-    ['nama'=>'Emmy Noether', 'penjelasan'=>'Aljabar abstrak dan fisika modern.'],
-    
-    // Geometri
-    ['nama'=>'Euclid', 'penjelasan'=>'Bapak Geometri klasik.'],
-    ['nama'=>'René Descartes', 'penjelasan'=>'Geometri analitik.'],
-    ['nama'=>'Bernhard Riemann', 'penjelasan'=>'Geometri non-Euclid.'],
-
-    // Kalkulus
-    ['nama'=>'Isaac Newton', 'penjelasan'=>'Kalkulus dan gravitasi.'],
-    ['nama'=>'Gottfried Wilhelm Leibniz', 'penjelasan'=>'Notasi kalkulus modern.'],
-    ['nama'=>'Leonhard Euler', 'penjelasan'=>'Identitas Euler dan analisis.'],
-
-    // Statistika
-    ['nama'=>'Karl Pearson', 'penjelasan'=>'Bapak statistika modern.'],
-    ['nama'=>'Ronald A. Fisher', 'penjelasan'=>'Genetika populasi dan statistika.'],
-    ['nama'=>'Florence Nightingale', 'penjelasan'=>'Visualisasi data dan statistik.'],
-
-    // Teori Bilangan
-    ['nama'=>'Pierre de Fermat', 'penjelasan'=>'Teorema Terakhir Fermat.'],
-    ['nama'=>'Carl Friedrich Gauss', 'penjelasan'=>'Pangeran Matematika.'],
-    ['nama'=>'Srinivasa Ramanujan', 'penjelasan'=>'Jenius deret tak hingga.'],
-
-    // Logika
-    ['nama'=>'George Boole', 'penjelasan'=>'Aljabar Boolean.'],
-    ['nama'=>'Kurt Gödel', 'penjelasan'=>'Teorema Ketidaklengkapan.'],
-    ['nama'=>'Gottlob Frege', 'penjelasan'=>'Logika matematika modern.'],
-
-    // Terapan
-    ['nama'=>'John von Neumann', 'penjelasan'=>'Teori permainan dan komputer.'],
-    ['nama'=>'Alan Turing', 'penjelasan'=>'Kecerdasan buatan dan komputasi.'],
-    ['nama'=>'Joseph Fourier', 'penjelasan'=>'Deret Fourier dan analisis panas.'],
-];
-@endphp
-
     <!-- GRID -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        @foreach($tokohs as $i => $tokoh)
+        @foreach($biografis as $biografi)
         <div class="card-anim group relative rounded-2xl cursor-pointer
             hover:-translate-y-3 hover:scale-[1.03] transition-all duration-500
             gradient-border-loop"
-            style="animation-delay: {{ 0.7 + ($i * 0.18) }}s;"
-            onclick="openModal('{{ $tokoh['nama'] }}','{{ $tokoh['penjelasan'] }}')">
+            style="animation-delay: {{ 0.7 + ($loop->index * 0.18) }}s;"
+            onclick="openModal('{{ $biografi->name }}','{{ $biografi->description }}')">
 
             <!-- Content Container -->
             <div class="p-5 flex items-center justify-center min-h-[120px] relative z-10 bg-white rounded-xl h-full w-full">
                 <h3 class="text-lg font-bold text-slate-800
                     group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-indigo-600 group-hover:to-pink-600 transition-all duration-300">
-                    {{ $tokoh['nama'] }}
+                    {{ $biografi->name }}
                 </h3>
             </div>
         </div>
@@ -232,7 +193,7 @@ $tokohs = [
 const modal = document.getElementById('bioModal');
 const modalName = document.getElementById('modalName');
 const modalDesc = document.getElementById('modalDesc');
-
+  
 function openModal(name, desc) {
     modalName.textContent = name;
     modalDesc.textContent = desc;
