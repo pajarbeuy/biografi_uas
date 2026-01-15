@@ -124,7 +124,7 @@
     </style>
 </head>
 
-<body class="bg-red-500 min-h-screen flex flex-col font-sans">
+<body class="bg-slate-50 min-h-screen flex flex-col font-sans">
 @include('layouts.navbar')
 
 <main class="flex-grow container mx-auto px-4 py-12">
