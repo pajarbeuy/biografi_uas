@@ -1,19 +1,34 @@
+{{--
+    Navbar Component dengan Alpine.js
+    
+    Navbar ini menggunakan Alpine.js untuk mobile menu toggle.
+    Terdapat conditional rendering berdasarkan role user:
+    - Guest: Tampilkan link Login & Daftar
+    - User (role: user): Tampilkan Tambah Tokoh, Dashboard User, Logout
+    - Admin/SuperAdmin: Tampilkan link ke Admin Panel, Logout
+    
+    Navigation items:
+    - Home, Profile Tokoh, Reference, About Us (untuk semua)
+    - Tambah Tokoh (hanya untuk user yang login dengan role 'user')
+--}}
 <nav x-data="{ open: false }" class="bg-white shadow-md border-b-2 border-gray-200 mb-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
-            <!-- Logo/Brand -->
+            {{-- Logo/Brand BIOTOMA --}}
             <div class="flex items-center">
                 <a href="/home" class="text-2xl font-bold text-black hover:text-blue-600 transition-colors">
                     BIOTOMA
                 </a>
             </div>
 
-            <!-- Main Navigation Menu (Desktop) -->
+            {{-- Main Navigation Menu (Desktop Only) --}}
             <div class="hidden md:flex items-center space-x-8">
                 <a href="/home" class="text-md font-medium text-gray-700 hover:text-blue-600 transition-colors">Home</a>
                 <a href="/profile-tokoh" class="text-md font-medium text-gray-700 hover:text-blue-600 transition-colors">Profile Tokoh</a>
                 <a href="/reference" class="text-md font-medium text-gray-700 hover:text-blue-600 transition-colors">Reference</a>
                 <a href="/about-us" class="text-md font-medium text-gray-700 hover:text-blue-600 transition-colors">About Us</a>
+                
+                {{-- Link "Tambah Tokoh" hanya muncul untuk USER yang login (bukan admin) --}}
                 @auth
                     @if(!auth()->user()->isAdmin() && !auth()->user()->isSuperAdmin())
                         <a href="/tambah-tokoh" class="text-md font-medium text-gray-700 hover:text-blue-600 transition-colors">Tambah Tokoh</a>
@@ -21,25 +36,34 @@
                 @endauth
             </div>
 
-            <!-- Auth Buttons (Desktop) -->
+            {{-- Auth Buttons (Desktop Only) 
+                 Tampilan berbeda berdasarkan status login dan role:
+                 - Guest: Login + Daftar button
+                 - User: Dashboard button (green) + Logout
+                 - Admin/SuperAdmin: Admin Panel button (blue) + Logout
+            --}}
             <div class="hidden md:flex items-center space-x-4">
                 @auth
+                    {{-- Greeting untuk user yang login --}}
                     <span class="text-sm text-black">
                         Halo, <span class="font-semibold">{{ auth()->user()->name }}</span>
                     </span>
                     
+                    {{-- Button Dashboard untuk USER biasa (bukan admin) --}}
                     @if(!auth()->user()->isAdmin() && !auth()->user()->isSuperAdmin())
                         <a href="{{ route('user.dashboard') }}" class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-lg transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                             Dashboard
                         </a>
                     @endif
                     
+                    {{-- Button Admin Panel untuk ADMIN/SUPERADMIN --}}
                     @if(auth()->user()->isAdmin() || auth()->user()->isSuperAdmin())
                         <a href="/admin" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                             Admin
                         </a>
                     @endif
                     
+                    {{-- Logout button untuk semua yang login --}}
                     <form method="POST" action="{{ route('logout') }}" class="inline">
                         @csrf
                         <button type="submit" class="inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-lg transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
@@ -47,6 +71,7 @@
                         </button>
                     </form>
                 @else
+                    {{-- Login & Daftar button untuk GUEST (belum login) --}}
                     <a href="{{ route('login') }}" class="inline-flex items-center px-4 py-2 bg-white border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white text-sm font-semibold rounded-lg transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                         Login
                     </a>
@@ -56,7 +81,9 @@
                 @endauth
             </div>
 
-            <!-- Hamburger Button (Mobile) -->
+            {{-- Hamburger Button (Mobile Only)
+                 Toggle mobile menu dengan Alpine.js
+            --}}
             <div class="md:hidden flex items-center">
                 <button @click="open = !open" class="text-gray-700 hover:text-blue-600 focus:outline-none">
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
@@ -68,31 +95,44 @@
         </div>
     </div>
 
-    <!-- Mobile Menu -->
+    {{-- Mobile Menu (Dropdown)
+         Muncul saat hamburger icon diklik (x-show="open")
+         Berisi navigasi yang sama dengan desktop + auth buttons
+    --}}
     <div x-show="open" @click.away="open = false" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95" class="md:hidden bg-white border-t border-gray-100 px-4 py-4 space-y-2 pb-6">
+        {{-- Navigation links (mobile) --}}
         <a href="/home" class="block text-base font-medium text-gray-700 hover:text-blue-600 py-2">Home</a>
         <a href="/profile-tokoh" class="block text-base font-medium text-gray-700 hover:text-blue-600 py-2">Profile Tokoh</a>
         <a href="/reference" class="block text-base font-medium text-gray-700 hover:text-blue-600 py-2">Reference</a>
         <a href="/about-us" class="block text-base font-medium text-gray-700 hover:text-blue-600 py-2">About Us</a>
         <a href="/tambah-tokoh" class="block text-base font-medium text-gray-700 hover:text-blue-600 py-2">Tambah Tokoh</a>
         
+        {{-- Auth Section (mobile) --}}
         <div class="pt-4 border-t border-gray-100 space-y-3">
             @auth
                 <div class="text-sm font-semibold text-gray-900 mb-2 px-1">Halo, {{ auth()->user()->name }}</div>
+                
+                {{-- Dashboard button untuk USER (mobile) --}}
                 @if(!auth()->user()->isAdmin() && !auth()->user()->isSuperAdmin())
                     <a href="{{ route('user.dashboard') }}" class="block w-full text-center px-4 py-2 bg-green-600 text-white rounded-lg font-semibold">Dashboard</a>
                 @endif
+               
+                {{-- Admin Panel button untuk ADMIN (mobile) --}}
                 @if(auth()->user()->isAdmin() || auth()->user()->isSuperAdmin())
                     <a href="/admin" class="block w-full text-center px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold">Admin Panel</a>
                 @endif
+                
+                {{-- Logout button (mobile) --}}
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="w-full px-4 py-2 bg-red-600 text-white rounded-lg font-semibold">Logout</button>
                 </form>
             @else
+                {{-- Login & Daftar untuk GUEST (mobile) --}}
                 <a href="{{ route('login') }}" class="block w-full text-center px-4 py-2 border-2 border-blue-600 text-blue-600 rounded-lg font-semibold">Login</a>
                 <a href="{{ route('register') }}" class="block w-full text-center px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold">Daftar</a>
             @endauth
         </div>
     </div>
 </nav>
+

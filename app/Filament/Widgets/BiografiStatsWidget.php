@@ -8,6 +8,19 @@ use App\Models\Category;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
+/**
+ * Widget Statistik Biografi untuk Dashboard Admin
+ * 
+ * Widget ini menampilkan overview statistik penting dalam bentuk cards:
+ * - Total Users: Jumlah user terdaftar
+ * - Total Biografi: Jumlah total biografi dengan breakdown published/pending
+ * - Pending Approvals: Biografi yang menunggu review
+ * - Kategori Terpopuler: Kategori dengan biografi terbanyak
+ * - Biografi Draft: Jumlah draft yang belum disubmit
+ * - Biografi Rejected: Jumlah biografi yang ditolak
+ * 
+ * Widget menggunakan layout 2 kolom (cards lebih besar) untuk better visibility.
+ */
 class BiografiStatsWidget extends BaseWidget
 {
     // Use 2 columns instead of default 4 = bigger cards!
@@ -15,11 +28,36 @@ class BiografiStatsWidget extends BaseWidget
     
     protected static ?string $pollingInterval = null;
     
+    /**
+     * Mendapatkan jumlah kolom untuk layout
+     * 
+     * Menggunakan 2 kolom (bukan default 4) agar setiap card tampil lebih besar
+     * dan lebih mudah dibaca oleh admin.
+     * 
+     * @return int Jumlah kolom (2)
+     */
     protected function getColumns(): int
     {
         return 2; // 2 cards per row instead of 4 = each card 2x bigger!
     }
     
+    /**
+     * Mendapatkan semua statistik yang akan ditampilkan
+     * 
+     * Method ini menghitung berbagai metrik dari database:
+     * - Count total users
+     * - Count biografi berdasarkan status (draft, pending, approved, published, rejected)
+     * - Menemukan kategori dengan biografi terbanyak
+     * 
+     * Setiap stat dilengkapi dengan:
+     * - Label dan nilai
+     * - Description dengan info tambahan
+     * - Icon yang sesuai
+     * - Warna berdasarkan status
+     * - Mini chart untuk visualisasi trend
+     * 
+     * @return array Array of Stat objects
+     */
     protected function getStats(): array
     {
         // Count biografis by status

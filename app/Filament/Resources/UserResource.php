@@ -13,6 +13,18 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
+/**
+ * Resource untuk Manajemen User
+ * 
+ * Resource ini hanya dapat diakses oleh SUPERADMIN.
+ * Digunakan untuk mengelola semua user dalam sistem dengan fitur:
+ * - CRUD user (Create, Read, Update, Delete)
+ * - Atur role user (user/admin/superadmin)
+ * - Password handling yang aman (optional saat edit)
+ * 
+ * Navigation item otomatis hidden untuk non-superadmin
+ * menggunakan method shouldRegisterNavigation().
+ */
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
@@ -24,13 +36,33 @@ class UserResource extends Resource
     protected static ?int $navigationSort = 1;
 
     /**
-     * Hide navigation item for non-superadmin users.
+     * Tentukan apakah navigation item harus ditampilkan
+     * 
+     * Resource ini hanya muncul di sidebar untuk SUPERADMIN.
+     * Admin biasa tidak dapat melihat atau mengakses user management.
+     * 
+     * @return bool True jika user adalah superadmin
      */
     public static function shouldRegisterNavigation(): bool
     {
         return auth()->user()?->isSuperAdmin() ?? false;
     }
 
+    /**
+     * Form untuk create/edit user
+     * 
+     * Form fields:
+     * - Name: Required, max 255 char
+     * - Email: Required, email format, unique
+     * - Password: 
+     *   - Required saat CREATE
+     *   - Optional saat EDIT (kosongkan jika tidak ingin ubah)
+     *   - Dehydrated only jika diisi
+     * - Role: Dropdown (user/admin/superadmin), required
+     * 
+     * @param Form $form Instance form Filament
+     * @return Form Form yang sudah dikonfigurasi
+     */
     public static function form(Form $form): Form
     {
         return $form
@@ -61,6 +93,25 @@ class UserResource extends Resource
             ]);
     }
 
+    /**
+     * Tabel untuk list semua user
+     * 
+     * Columns:
+     * - Name: Searchable, sortable
+     * - Email: Searchable, sortable
+     * - Role: Badge dengan color coding
+     *   - Red (danger): superadmin
+     *   - Yellow (warning): admin
+     *   - Blue (info): user
+     * - Created_at & Updated_at: Toggleable, default hidden
+     * 
+     * Actions:
+     * - Edit: Untuk update user
+     * - Delete: Bulk delete dengan konfirmasi
+     * 
+     * @param Table $table Instance tabel Filament
+     * @return Table Tabel yang sudah dikonfigurasi
+     */
     public static function table(Table $table): Table
     {
         return $table

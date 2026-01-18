@@ -13,6 +13,24 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
+/**
+ * Resource untuk Manajemen Biografi Tokoh Matematika
+ * 
+ * Resource terbesar dan terkom plex dalam aplikasi ini.
+ * Mengelola seluruh lifecycle biografi dari draft hingga published.
+ * 
+ * Fitur utama:
+ * - Form lengkap dengan 10+ fields (identitas, pendidikan, foto, referensi, dll)
+ * - Auto-generate slug dari nama tokoh
+ * - Upload foto tokoh dengan preview
+ * - Repeater untuk multiple referensi/sumber
+ * - Status workflow: draft → pending → approved → published
+ * - Approval actions: approve, reject, publish
+ * - Bulk actions untuk efficiency
+ * - Filtering berdasarkan status dan kategori
+ * 
+ * Dapat diakses oleh admin dan superadmin.
+ */
 class BiografiResource extends Resource
 {
     protected static ?string $model = Biografi::class;
@@ -21,6 +39,48 @@ class BiografiResource extends Resource
     
     protected static ?string $navigationLabel = 'Biografi';
 
+    /**
+     * Form untuk create/edit biografi tokoh matematika
+     * 
+     * Form ini sangat comprehensive dengan berbagai field groups:
+     * 
+     * 1. IDENTITAS TOKOH:
+     *    - Name: Auto-generate slug saat blur
+     *    - Slug: Auto-filled, disabled, dehydrated
+     * 
+     * 2. TEMPAT & TANGGAL:
+     *    - Birth place, Birth date, Death date
+     *    - Validation: death_date harus after birth_date
+     * 
+     * 3. PENDIDIKAN:
+     *    - Textarea untuk list pendidikan formal
+     * 
+     * 4. KATEGORI:
+     *    - Select dari tabel categories (cabang matematika)
+     *    - Searchable, preload
+     * 
+     * 5. KONTEN:
+     *    - Achievements: Textarea untuk prestasi
+     *    - Life story: RichEditor untuk kisah hidup lengkap
+     * 
+     * 6. REFERENSI:
+     *    - Repeater field untuk multiple sumber
+     *    - Setiap referensi: title, author, year, url, type
+     *    - Collapsible, cloneable, default 0 items
+     * 
+     * 7. FOTO:
+     *    - File upload dengan custom naming (slug-based)
+     *    - Max 2MB, formats: jpg, jpeg, png, webp
+     *    - Preview disabled (fix loading issue)
+     * 
+     * 8. STATUS:
+     *    - Dropdown: draft, pending, approved, rejected, published
+     *    - Default: draft
+     *    - Helper text menjelaskan setiap status
+     * 
+     * @param Form $form Instance form Filament
+     * @return Form Form yang sudah dikonfigurasi
+     */
     public static function form(Form $form): Form
     {
         return $form
@@ -166,6 +226,43 @@ class BiografiResource extends Resource
             ]);
     }
 
+    /**
+     * Tabel untuk list semua biografi
+     * 
+     * Columns:
+     * - Name: Nama tokoh (searchable, sortable)
+     * - Birth place: Tempat lahir (searchable, toggleable)
+     * - Birth date: Format d/m/Y (sortable, toggleable)
+     * - Category: Relasi ke category.name (sortable, toggleable)
+     * - User: Relasi ke user.name - siapa yang submit (sortable, toggleable)
+     * - Status: Badge dengan color-coding:
+     *   - Secondary (gray): draft
+     *   - Warning (yellow): pending
+     *   - Success (green): approved
+     *   - Danger (red): rejected
+     *   - Primary (blue): published
+     * - Image: Preview foto 50x50px
+     * - Created at: Tanggal submit (sortable, default hidden)
+     * 
+     * Filters:
+     * - Status: Filter by status
+     * - Category: Filter by kategori matematika
+     * 
+     * Row Actions:
+     * - Edit: Update biografi
+     * - Approve: Ubah status jadi approved (visible untuk draft/pending)
+     * - Reject: Ubah status jadi rejected (visible untuk pending)
+     * - Publish: Ubah status jadi published (visible untuk approved)
+     * 
+     * Bulk Actions:
+     * - Delete: Hapus multiple biografi
+     * - Bulk Approve/Reject/Publish: Mass actions dengan konfirmasi
+     * 
+     * Pagination: Default 5, options: 5/10/25/50/100
+     * 
+     * @param Table $table Instance tabel Filament
+     * @return Table Tabel yang sudah dikonfigurasi
+     */
     public static function table(Table $table): Table
     {
         return $table

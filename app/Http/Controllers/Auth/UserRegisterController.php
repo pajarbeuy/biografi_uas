@@ -9,6 +9,18 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 
+/**
+ * Controller untuk Registrasi User Baru
+ * 
+ * Controller ini menangani pendaftaran user baru dengan:
+ * - Validasi input (name, email, password)
+ * - Hash password untuk keamanan
+ * - Default role assignment: 'user'
+ * - Auto-login setelah registrasi berhasil
+ * - Redirect ke homepage (/home)
+ * 
+ * Semua user yang register akan otomatis mendapat role 'user' (bukan admin).
+ */
 class UserRegisterController extends Controller
 {
     /**
@@ -20,7 +32,21 @@ class UserRegisterController extends Controller
     }
 
     /**
-     * Handle an incoming registration request.
+     * Handle incoming registration request
+     * 
+     * Method ini:
+     * 1. Validasi input:
+     *    - Name: Required, string, max 255
+     *    - Email: Required, unique di tabel users
+     *    - Password: Required, confirmed, memenuhi rules default Laravel
+     * 2. Create user baru dengan:
+     *    - Password di-hash menggunakan Hash::make()
+     *    - Role default: 'user' (bukan admin/superadmin)
+     * 3. Auto-login user yang baru dibuat
+     * 4. Redirect ke /home
+     * 
+     * @param Request $request Request dengan data registrasi
+     * @return \Illuminate\Http\RedirectResponse Redirect ke homepage
      */
     public function register(Request $request)
     {

@@ -13,6 +13,20 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
+/**
+ * Resource untuk Manajemen Kategori Matematika
+ * 
+ * Resource ini hanya dapat diakses oleh SUPERADMIN.
+ * Digunakan untuk mengelola kategori cabang matematika seperti:
+ * - Aljabar
+ * - Geometri
+ * - Kalkulus
+ * - Statistika
+ * - dll.
+ * 
+ * Kategori digunakan untuk mengklasifikasikan tokoh matematikawan
+ * berdasarkan bidang keahlian utama mereka.
+ */
 class CategoryResource extends Resource
 {
     protected static ?string $model = Category::class;
@@ -22,13 +36,28 @@ class CategoryResource extends Resource
     protected static ?string $navigationLabel = 'Kategori';
 
     /**
-     * Hide navigation item for non-superadmin users.
+     * Tentukan apakah navigation item harus ditampilkan
+     * 
+     * Resource ini hanya muncul di sidebar untuk SUPERADMIN.
+     * 
+     * @return bool True jika user adalah superadmin
      */
     public static function shouldRegisterNavigation(): bool
     {
         return auth()->user()?->isSuperAdmin() ?? false;
     }
 
+    /**
+     * Form untuk create/edit kategori
+     * 
+     * Form fields:
+     * - Name: Nama kategori (required, max 255)
+     * - Slug: URL-friendly identifier (required, unique, max 255)
+     * - Description: Deskripsi kategori (optional, textarea full width)
+     * 
+     * @param Form $form Instance form Filament
+     * @return Form Form yang sudah dikonfigurasi
+     */
     public static function form(Form $form): Form
     {
         return $form
@@ -45,6 +74,21 @@ class CategoryResource extends Resource
             ]);
     }
 
+    /**
+     * Tabel untuk list semua kategori
+     * 
+     * Columns:
+     * - Name: Nama kategori (searchable, sortable)
+     * - Slug: URL identifier (searchable, sortable)
+     * - Created_at & Updated_at: Toggleable, default hidden
+     * 
+     * Actions:
+     * - Edit: Update kategori
+     * - Delete: Bulk delete
+     * 
+     * @param Table $table Instance tabel Filament
+     * @return Table Tabel yang sudah dikonfigurasi
+     */
     public static function table(Table $table): Table
     {
         return $table
