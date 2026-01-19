@@ -19,8 +19,37 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
+/**
+ * Provider untuk konfigurasi Filament Admin Panel
+ * 
+ * Provider ini mengkonfigurasi panel admin Filament dengan pengaturan:
+ * - Path: /admin
+ * - Autentikasi menggunakan web guard
+ * - Auto-discovery untuk Resources, Pages, dan Widgets
+ * - Custom navigation items (link ke homepage)
+ * - Sidebar collapsible di desktop
+ * 
+ * Panel ini hanya dapat diakses oleh user dengan role 'admin' atau 'superadmin'
+ * sesuai dengan method canAccessPanel() di model User.
+ */
 class AdminPanelProvider extends PanelProvider
 {
+    /**
+     * Konfigurasi panel Filament
+     * 
+     * Method ini mengembalikan konfigurasi lengkap untuk admin panel meliputi:
+     * - ID dan path panel (/admin)
+     * - Halaman login default Filament
+     * - Brand name yang ditampilkan di panel
+     * - Authentication guard (web)
+     * - Warna tema (primary = blue)
+     * - Auto-discovery resources, pages, dan widgets dari direktori app/Filament
+     * - Custom navigation items (Home link)
+     * - Middleware stack untuk security dan session management
+     * 
+     * @param Panel $panel Instance panel yang akan dikonfigurasi
+     * @return Panel Panel yang sudah dikonfigurasi
+     */
     public function panel(Panel $panel): Panel
     {
         return $panel

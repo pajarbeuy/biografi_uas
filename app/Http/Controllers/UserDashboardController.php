@@ -6,10 +6,39 @@ use App\Models\Biografi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Controller untuk Dashboard User (Non-Admin)
+ * 
+ * Controller ini mengelola dashboard khusus untuk user biasa (role: 'user').
+ * User dapat melihat dan mengelola biografi yang mereka submit sendiri.
+ * 
+ * Fitur:
+ * - View list biografi sendiri dengan statistik
+ * - Edit biografi yang berstatus draft atau rejected
+ * - Delete biografi sendiri
+ * - Update biografi dengan validasi dan authorization
+ * 
+ * Access control ketat:
+ * - User hanya bisa melihat/edit/delete biografi milik mereka sendiri
+ * - Ownership verification di setiap action
+ * - Status restriction: Hanya draft/rejected yang bisa diedit
+ */
 class UserDashboardController extends Controller
 {
     /**
-     * Display the user's dashboard with their submitted biografi.
+     * Tampilkan dashboard user dengan list biografi dan statistik
+     * 
+     * Method ini:
+     * 1. Ambil semua biografi milik user yang login
+     * 2. Include relasi category dan count views
+     * 3. Hitung statistik berdasarkan status:
+     *    - Total biografi
+     *    - Count per status (draft, pending, approved, published, rejected)
+     * 4. Return view dengan data biografis dan stats
+     * 
+     * View: resources/views/user/dashboard.blade.php
+     * 
+     * @return \Illuminate\View\View View dashboard user
      */
     public function index()
     {
@@ -36,7 +65,21 @@ class UserDashboardController extends Controller
     }
     
     /**
-     * Show the form for editing the specified biography.
+     * Tampilkan form edit biografi
+     * 
+     * Method ini:
+     * 1. Load biografi dengan  relasi references
+     * 2. Verify ownership (user_id harus match dengan Auth::id())
+     * 3. Cek status: Hanya draft atau rejected yang boleh diedit
+     * 4. Load daftar categories untuk dropdown
+     * 5. Return view edit form
+     * 
+     * Authorization:
+     * - 403 jika bukan pemilik biografi
+     * - Redirect dengan error jika status tidak memenuhi (bukan draft/rejected)
+     * 
+     * @param int $id ID biografi yang akan diedit
+     * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse View edit atau redirect
      */
     public function edit($id)
     {
@@ -58,7 +101,40 @@ class UserDashboardController extends Controller
     }
     
     /**
-     * Update the specified biography in storage.
+     * Update biografi di database
+     * 
+     * Method ini sangat comprehensive:
+     * 
+     * 1. AUTHORIZATION:
+     *    - Verify ownership (user_id = Auth::id())
+     *    - Cek status: Hanya draft/rejected yang bisa diupdate
+     * 
+     * 2. VALIDASI:
+     *    - Name, birth_place, education, dates, category_id, dll
+     *    - Image: max 2MB, format jpg/jpeg/png
+     * 
+     * 3. SLUG UPDATE:
+     *    - Jika nama berubah, generate slug baru
+     *    - Ensure unique slug dengan counter
+     * 
+     * 4. IMAGE HANDLING:
+     *    - Upload image baru jika ada
+     *    - Delete old image dari storage
+     * 
+     * 5. XSS PROTECTION:
+     *    - Clean life_story dan achievements dengan helper clean()
+     *    - Sanitize HTML untuk mencegah XSS attack
+     * 
+     * 6. REFERENCES:
+     *    - Delete semua referensi lama
+     *    - Create referensi baru dari input
+     * 
+     * 7. STATUS AUTO-CHANGE:
+     *    - Setelah update, status otomatis jadi 'pending' untuk review ulang
+     * 
+     * @param Request $request Request dengan data biografi update
+     * @param int $id ID biografi yang akan diupdate
+     * @return \Illuminate\Http\RedirectResponse Redirect ke dashboard
      */
     public function update(Request $request, $id)
     {
@@ -153,7 +229,17 @@ class UserDashboardController extends Controller
     }
     
     /**
-     * Remove the specified biography from storage.
+     * Hapus biografi dari database
+     * 
+     * Method ini:
+     * 1. Verify ownership (user_id = Auth::id())
+     * 2. Delete image file dari storage jika ada
+     * 3. Delete biografi (cascade delete references)
+     * 4. Redirect ke dashboard dengan pesan sukses
+     * 
+     * @param int $id ID biografi yang akan dihapus
+     * @return \Illuminate\Http\RedirectResponse Redirect ke dashboard
+     * @throws \Symfony\Component\HttpFoundation\Exception\HttpException 403 jika bukan pemilik
      */
     public function destroy($id)
     {
