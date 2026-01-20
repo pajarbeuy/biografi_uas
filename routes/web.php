@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BiografiController;
+use App\Http\Controllers\PekerjaanController;
 use App\Http\Controllers\UserDashboardController;
 use Illuminate\Support\Facades\Route;
 
@@ -52,6 +53,9 @@ Route::middleware(['auth'])->prefix('user')->name('user.')->group(function () {
     Route::get('/biografi/{biografi}/edit', [UserDashboardController::class, 'edit'])->name('biografi.edit');
     Route::put('/biografi/{biografi}', [UserDashboardController::class, 'update'])->name('biografi.update');
 });
+
+// Route pekerjaan
+Route::resource('pekerjaan', PekerjaanController::class);
 
 // Authentication Routes
 require __DIR__.'/auth.php';
