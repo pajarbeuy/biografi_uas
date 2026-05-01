@@ -1,17 +1,25 @@
 <?php
 
-// Tampilkan semua error PHP
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
+ini_set('display_errors', 0);
 error_reporting(E_ALL);
 
-// Coba load Laravel
-try {
-    require __DIR__ . '/../public/index.php';
-} catch (\Throwable $e) {
-    echo "<pre>";
-    echo "ERROR: " . $e->getMessage() . "\n\n";
-    echo "FILE: " . $e->getFile() . ":" . $e->getLine() . "\n\n";
-    echo $e->getTraceAsString();
-    echo "</pre>";
+// Redirect storage ke /tmp (satu-satunya folder writable di Vercel)
+$_ENV['APP_STORAGE'] = '/tmp';
+putenv('APP_STORAGE=/tmp');
+
+// Buat folder yang dibutuhkan Laravel di /tmp
+$directories = [
+    '/tmp/storage/app/public',
+    '/tmp/storage/framework/cache/data',
+    '/tmp/storage/framework/sessions',
+    '/tmp/storage/framework/views',
+    '/tmp/storage/logs',
+];
+
+foreach ($directories as $dir) {
+    if (!is_dir($dir)) {
+        mkdir($dir, 0775, true);
+    }
 }
+
+require __DIR__ . '/../public/index.php';
