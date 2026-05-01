@@ -4,7 +4,7 @@
 /storage/*.key
 /storage/pail
 .env
-/bootstrap/cache/*.php
+#/bootstrap/cache/*.php
 .env.backup
 .env.production
 .phpactor.json

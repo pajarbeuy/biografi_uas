@@ -3,24 +3,16 @@
 ini_set('display_errors', 0);
 error_reporting(E_ALL);
 
-// Storage path
 $storagePath = '/tmp/storage';
 $_ENV['APP_STORAGE'] = $storagePath;
 putenv("APP_STORAGE=$storagePath");
 
-// Bootstrap path
-$bootstrapPath = '/tmp/bootstrap';
-$_ENV['APP_BOOTSTRAP_PATH'] = $bootstrapPath;
-putenv("APP_BOOTSTRAP_PATH=$bootstrapPath");
-
-// Buat semua folder yang dibutuhkan
 $directories = [
     $storagePath . '/app/public',
     $storagePath . '/framework/cache/data',
     $storagePath . '/framework/sessions',
     $storagePath . '/framework/views',
     $storagePath . '/logs',
-    $bootstrapPath . '/cache',  // ← bootstrap cache di /tmp
 ];
 
 foreach ($directories as $dir) {
@@ -28,5 +20,22 @@ foreach ($directories as $dir) {
         mkdir($dir, 0775, true);
     }
 }
+
+// Buat bootstrap/cache writable dengan copy ke /tmp
+$bootstrapCacheSrc = __DIR__ . '/../bootstrap/cache';
+$bootstrapCacheDst = '/tmp/bootstrap/cache';
+
+if (!is_dir($bootstrapCacheDst)) {
+    mkdir($bootstrapCacheDst, 0775, true);
+}
+
+// Copy packages.php ke /tmp supaya Laravel bisa update di sana
+if (file_exists($bootstrapCacheSrc . '/packages.php')) {
+    copy($bootstrapCacheSrc . '/packages.php', $bootstrapCacheDst . '/packages.php');
+}
+
+// Override bootstrap cache path
+putenv("APP_BOOTSTRAP_CACHE=$bootstrapCacheDst");
+$_ENV['APP_BOOTSTRAP_CACHE'] = $bootstrapCacheDst;
 
 require __DIR__ . '/../public/index.php';

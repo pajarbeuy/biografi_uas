@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Foundation\Application;
+use App\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 
@@ -18,6 +18,5 @@ $app = Application::configure(basePath: dirname(__DIR__))
     })->create();
 
 $app->useStoragePath(env('APP_STORAGE', base_path('storage')));
-$app->useBootstrapPath(env('APP_BOOTSTRAP_PATH', base_path('bootstrap')));  // ← tambah ini
 
 return $app;
