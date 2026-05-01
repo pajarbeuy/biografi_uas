@@ -1,0 +1,7 @@
+/storage/logs/*
+.git
+.env
+.env.*.php
+node_modules
+vendor
+tests
