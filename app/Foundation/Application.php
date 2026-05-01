@@ -6,23 +6,32 @@ use Illuminate\Foundation\Application as BaseApplication;
 
 class Application extends BaseApplication
 {
+    private function tmpPath(string $file): string
+    {
+        // Pakai /tmp hanya di Vercel (Linux), lokal tetap normal
+        if (PHP_OS_FAMILY === 'Linux' && is_dir('/tmp')) {
+            return '/tmp/bootstrap/cache/' . $file;
+        }
+        return $this->bootstrapPath('cache/' . $file);
+    }
+
     public function getCachedPackagesPath(): string
     {
-        return '/tmp/bootstrap/cache/packages.php';
+        return $this->tmpPath('packages.php');
     }
 
     public function getCachedServicesPath(): string
     {
-        return '/tmp/bootstrap/cache/services.php';
+        return $this->tmpPath('services.php');
     }
 
     public function getCachedConfigPath(): string
     {
-        return '/tmp/bootstrap/cache/config.php';
+        return $this->tmpPath('config.php');
     }
 
     public function getCachedRoutesPath(): string
     {
-        return '/tmp/bootstrap/cache/routes-v7.php';
+        return $this->tmpPath('routes-v7.php');
     }
 }
