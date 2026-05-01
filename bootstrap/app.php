@@ -1,34 +1,23 @@
 <?php
 
-// Force tampilkan error meskipun di production
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+use Illuminate\Foundation\Application;
+use Illuminate\Foundation\Configuration\Exceptions;
+use Illuminate\Foundation\Configuration\Middleware;
 
-$_ENV['APP_STORAGE'] = '/tmp';
-putenv('APP_STORAGE=/tmp');
+$app = Application::configure(basePath: dirname(__DIR__))
+    ->withRouting(
+        web: __DIR__.'/../routes/web.php',
+        commands: __DIR__.'/../routes/console.php',
+        health: '/up',
+    )
+    ->withMiddleware(function (Middleware $middleware) {
+        //
+    })
+    ->withExceptions(function (Exceptions $exceptions) {
+        //
+    })->create();
 
-$directories = [
-    '/tmp/storage/app/public',
-    '/tmp/storage/framework/cache/data',
-    '/tmp/storage/framework/sessions',
-    '/tmp/storage/framework/views',
-    '/tmp/storage/logs',
-];
+// Tambahkan HANYA baris ini, setelah ->create()
+$app->useStoragePath(env('APP_STORAGE', base_path('storage')));
 
-foreach ($directories as $dir) {
-    if (!is_dir($dir)) {
-        mkdir($dir, 0775, true);
-    }
-}
-
-try {
-    require __DIR__ . '/../public/index.php';
-} catch (\Throwable $e) {
-    http_response_code(500);
-    echo "<pre style='background:#1e1e1e;color:#ff6b6b;padding:20px;'>";
-    echo "<b>ERROR:</b> " . $e->getMessage() . "\n\n";
-    echo "<b>FILE:</b> " . $e->getFile() . ":" . $e->getLine() . "\n\n";
-    echo $e->getTraceAsString();
-    echo "</pre>";
-}
+return $app;

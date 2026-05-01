@@ -1,13 +1,13 @@
 <?php
 
-ini_set('display_errors', 0);
+// Force tampilkan error meskipun di production
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Redirect storage ke /tmp (satu-satunya folder writable di Vercel)
 $_ENV['APP_STORAGE'] = '/tmp';
 putenv('APP_STORAGE=/tmp');
 
-// Buat folder yang dibutuhkan Laravel di /tmp
 $directories = [
     '/tmp/storage/app/public',
     '/tmp/storage/framework/cache/data',
@@ -22,4 +22,13 @@ foreach ($directories as $dir) {
     }
 }
 
-require __DIR__ . '/../public/index.php';
+try {
+    require __DIR__ . '/../public/index.php';
+} catch (\Throwable $e) {
+    http_response_code(500);
+    echo "<pre style='background:#1e1e1e;color:#ff6b6b;padding:20px;'>";
+    echo "<b>ERROR:</b> " . $e->getMessage() . "\n\n";
+    echo "<b>FILE:</b> " . $e->getFile() . ":" . $e->getLine() . "\n\n";
+    echo $e->getTraceAsString();
+    echo "</pre>";
+}
